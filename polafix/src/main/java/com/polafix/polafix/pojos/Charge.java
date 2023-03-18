@@ -1,6 +1,7 @@
 package com.polafix.polafix.pojos;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Charge {
     public Date date;
@@ -37,5 +38,17 @@ public class Charge {
         return price;
     }
 
+    public boolean equals(Charge charge){
+        if(this.date.equals(charge.date) && this.name.equals(charge.name) 
+            && this.number==charge.number && this.price==charge.price && this.season==charge.season)
+                return true;
+        else
+            return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, name, season, number, price);
+    }
 
 }

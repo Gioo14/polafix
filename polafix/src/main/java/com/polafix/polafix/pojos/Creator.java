@@ -1,6 +1,7 @@
 package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Creator {
     public String name;
@@ -29,4 +30,15 @@ public class Creator {
         this.getSeries().add(serie);
     }
 
+    public boolean equals(Creator creator){
+        if(this.name.equals(creator.name) && this.surname.equals(creator.surname))
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, surname, series);
+    }
 }

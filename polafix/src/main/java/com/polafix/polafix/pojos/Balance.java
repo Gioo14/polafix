@@ -3,6 +3,7 @@ package com.polafix.polafix.pojos;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class Balance {
     public float saldo;
@@ -44,6 +45,18 @@ public class Balance {
 
     public void addCharge(Charge charge){
         this.getAllCharges().add(charge);
+    }
+
+    public boolean equals(Balance balance){
+        if(this.saldo==balance.getSaldo() && this.charges.equals(balance.getAllCharges()))
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(saldo, charges);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Serie {
     public String name;
@@ -91,5 +92,33 @@ public class Serie {
 
     public Chapter getChapter(Season season, int number){
         return season.getChapter(number);
+    }
+
+    public boolean equals(Serie serie){
+        if(this.name.equals(serie.name) && equalsActors(serie.getActors()) && equalsCreators(serie.getCreators()))
+            return true;
+        else
+            return false;
+    }
+
+    private boolean equalsActors(ArrayList<Actor> actors){
+        for(int i=0; i<actors.size(); i++){
+            if(!this.actors.contains(actors.get(i)))
+                return false;
+        }
+        return true;
+    }
+
+    private boolean equalsCreators(ArrayList<Creator> creators){
+        for(int i=0; i<creators.size(); i++){
+            if(!this.creators.contains(creators.get(i)))
+                return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, type, shortDescription, seasons, actors, creators);
     }
 }

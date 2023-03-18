@@ -2,6 +2,7 @@ package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class SerieUtente {
     public Serie serie;
@@ -61,5 +62,26 @@ public class SerieUtente {
             }
         }
         return c;
+    }
+
+    
+    public boolean equals(SerieUtente serieUt){
+        if(this.serie.equals(serieUt.serie) && this.currentSeason==serieUt.currentSeason && chaptersEquals(serieUt.getUserChapters()))
+            return true;
+        else
+            return false;
+    }
+
+    private boolean chaptersEquals(HashMap<Chapter, ChapterState> chapters){
+        for(int i=0; i<chapters.size(); i++){
+            if(!chapters.get(i).equals(this.userChapters.get(i)))
+                return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(serie, currentSeason, userChapters);
     }
 }

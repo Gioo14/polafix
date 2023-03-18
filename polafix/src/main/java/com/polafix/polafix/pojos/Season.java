@@ -1,13 +1,16 @@
 package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Season {
     public String title;
+    public Serie serie;
     public int number;
     public ArrayList<Chapter> chapters;
 
-    public Season(String title, int number, ArrayList<Chapter> chapters) {
+    public Season(String title, int number, ArrayList<Chapter> chapters, Serie serie) {
+        this.serie=serie;
         setTitle(title);
         setNumber(number);
         setChapters(chapters);
@@ -54,4 +57,21 @@ public class Season {
         }
         return null;
     }
+
+    public Serie getSerie(){
+        return this.serie;
+    }
+
+    public boolean equals(Season season){
+        if(this.serie.equals(season.serie) && (this.title.equals(season.title)) && (this.number==season.number))
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, serie, number, chapters);
+    }
+
 }

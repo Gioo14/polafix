@@ -1,0 +1,55 @@
+DOMAIN-DRIVEN DESIGN
+
+Clasificacion de los elementos del modelo anterior como Entities, Value Objects o Services.
+
+User -> entity
+La clase User es una entidad en la que se definen todos los atributos y las operaciones del usuario suscrito a Polafix. Cada usuario es único y y está definido por un conjunto de atributos, ademas, tiene una identidad en la aplicación, de hecho, cada usuario tiene un Id único que lo distingue y con el que instanciamos objetos de usuario.
+
+Balance -> entity
+Balance representa una entidad porque cada usuario ni tiene un único y el balance debe ser monitoreado durante la ejecución de la aplicación. En el balance, de hecho, el atributo saldo debe ser monitoreado
+
+Charge -> value object
+Charge es un value object, porque es una clase que define los atributos que el usuario ve cuando accede al balance. Además, no es una entidad porque no tiene su propia identidad, y de esta clase solo nos interesan los metorios get(), no hay nada que monitorear.
+
+Serie -> entity
+Serie es la otra entidad fundamental de Polafix. Define las características de cada serie presente en el catálogo, cada serie es única y caracterizada por el nombre tiene su propia identidad y hay que controlar el estado de visualización de los capítulos para cada usuario.
+
+Season -> entity 
+Cada serie se caracteriza por temporadas y capítulos a los que el usuario accede. La season es una entidad porque tiene su propia identidad y singularidad, y también se debe monitorear la season a la que llegó el usuario.
+
+Chapter -> entity 
+El Chapter también es una entity, porque representa una parte importante de la aplicación. Cada capítulo está asociado a una temporada y a una serie que definen su identidad y unicidad. Además se controla el estado que puede ser VISTO o PENDIENTE.
+
+Actor -> value object
+Actor es un value object, porque representa un atributo de la serie y no es una clase que necesita ser monitoreada, solo nos interesa acceder a él por métodos get().
+
+Creator -> value object
+Creator es un value object, porque representa un atributo de la serie y no es una clase que necesita ser monitoreada, solo nos interesa acceder a él por métodos get().
+
+Subscription -> value object
+Es un value object enumerativo que define el tipo de suscripción de los usuarios suscritos a Polafix.
+
+Type -> value object
+Es un value object enumerativo que define el tipo de serie y el precio asociado. 
+
+ChapterState -> value object
+Es un value object para el Chapter para determinar si el episodio fue visto o no.
+
+ManagePaiment -> Service
+ManagePaiment es un servicio porque es la clase con la que el sistema va a gestionar los pagos del usuario al final del mes. Como servicio no es ni un método de Usuario ni de Balance ya que es el sistema quien lo gestiona. Lo que hace es acceder al Balance y al IBAN de un usuario determinado a partir del ID y realizar el pago borrando el saldo del usuario. 
+
+
+
+Identificar los aggregates, destacando su aggregate root
+
+•	Aggregate 1: User, Balance
+	o	Aggregate root: User
+•	Aggregate 2: Serie, Season, Chapter
+	o	Aggregate root: Serie
+
+Aggregate 1: La entity user es el aggregate root del primer agregado. De hecho, cada usuario está asociado a un balance y si el usuario se elimina del sistema, el balance asociado a este también se eliminará.
+
+Aggregate 2: La relación entre serie, season y chapter pone serie como aggregate root. De hecho, cada capítulo se asocia con una temporada y cada temporada con una serie seria, por lo que al eliminar la serie también desaparecerían los capítulos y las temporadas.
+
+Los objetos de valor enumerativos no se encuentran en los agregados, ya que existen como objetos independientemente de otras entidades. 
+Incluso Charge, Actor y Creator no se encuentran en los agregados, ya que al eliminar una serie no se eliminan también los actores y los creadores de esta. Su ciclo de vida no está estrechamente relacionado con la serie. Del mismo modo, al eliminar un usuario, el objeto charge sigue existiendo.

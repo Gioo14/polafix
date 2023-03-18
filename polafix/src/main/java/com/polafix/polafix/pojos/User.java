@@ -2,9 +2,12 @@ package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class User {
     public String userID;
+    public String name;
+    public String surname;
     public Subscripton type;
     public String IBAN;
     private String password;
@@ -13,7 +16,9 @@ public class User {
     public ArrayList<SerieUtente> inlist;
     public Balance balance;
 
-    public User(String userId, Subscripton type, String IBAN){
+    public User(String userId, Subscripton type, String IBAN, String name, String surname){
+        this.name=name;
+        this.surname=surname;
         this.userID=userId;
         this.type=type;
         this.IBAN=IBAN;
@@ -24,6 +29,13 @@ public class User {
         this.started= new ArrayList<SerieUtente>();
         this.ended= new ArrayList<SerieUtente>();
         this.inlist= new ArrayList<SerieUtente>();
+    }
+
+    public boolean equals(User user){
+        if(this.userID.equals(user.userID))
+            return true;
+        else
+            return false;
     }
 
     public String getUserID() {
@@ -131,5 +143,10 @@ public class User {
             return serie.getSerie().getSeason(1).getChapter(1);
         }else
             return chapter;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userID, name, surname, type, IBAN, password, ended, started, inlist, balance);
     }
 }
