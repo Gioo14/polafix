@@ -9,11 +9,11 @@ public class Season {
     public int number;
     public ArrayList<Chapter> chapters;
 
-    public Season(String title, int number, ArrayList<Chapter> chapters, Serie serie) {
+    public Season(String title, int number, Serie serie) {
         this.serie=serie;
         setTitle(title);
         setNumber(number);
-        setChapters(chapters);
+        this.chapters = new ArrayList<Chapter>();
     }
 
     public String getTitle() {
@@ -36,8 +36,9 @@ public class Season {
         this.number = number;
     }
 
-    public void setChapters(ArrayList<Chapter> chapters) {
-        this.chapters = new ArrayList<Chapter>(chapters);
+    public void addChapter(Chapter chapter) {
+        if(!chapters.contains(chapter))
+            this.chapters.add(chapter);
     }
 
     public Chapter getChapter(String title){

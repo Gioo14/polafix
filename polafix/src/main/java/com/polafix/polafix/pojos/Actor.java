@@ -31,6 +31,17 @@ public class Actor {
         this.getSeries().add(serie);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Actor)) {
+            return false;
+        }
+        Actor actor = (Actor) o;
+        return Objects.equals(name, actor.name) && Objects.equals(surname, actor.surname) && Objects.equals(series, actor.series);
+    }
+
     public boolean equals(Actor actor){
         if(this.name.equals(actor.name) && this.surname.equals(actor.surname))
             return true;

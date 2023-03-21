@@ -2,7 +2,9 @@ package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+
 
 public class SerieUtente {
     public Serie serie;
@@ -73,9 +75,16 @@ public class SerieUtente {
     }
 
     private boolean chaptersEquals(HashMap<Chapter, ChapterState> chapters){
-        for(int i=0; i<chapters.size(); i++){
-            if(!chapters.get(i).equals(this.userChapters.get(i)))
+        for (Map.Entry<Chapter, ChapterState> entry : chapters.entrySet()) {
+            Chapter chapter1 = entry.getKey();
+            ChapterState state1 = entry.getValue();
+            if(!this.userChapters.containsKey(chapter1))
                 return false;
+            else{
+                ChapterState state2 = this.userChapters.get(chapter1);
+                if(!state2.equals(state1))
+                    return false;
+            }
         }
         return true;
     }

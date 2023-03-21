@@ -11,13 +11,13 @@ public class Serie {
     public ArrayList<Actor> actors;
     public ArrayList<Creator> creators;
 
-    public Serie(String name, Type type, String shortDescription, ArrayList<Season> seasons, ArrayList<Actor> actors, ArrayList<Creator> creators) {
+    public Serie(String name, Type type, String shortDescription) {
         setName(name);
         setType(type);
         setDescription(shortDescription);
-        setSeasons(seasons);
-        setActors(actors);
-        setCreators(creators);
+        this.seasons = new ArrayList<Season>();
+        this.actors = new ArrayList<Actor>();
+        this.creators = new ArrayList<Creator>();
     } 
 
     public String getName() {
@@ -56,16 +56,40 @@ public class Serie {
         this.shortDescription = shortDescription;
     }
 
-    public void setActors(ArrayList<Actor> actors) {
-        this.actors = new ArrayList<Actor>(actors);
+    public void addActor(Actor actor) {
+        if(!actors.contains(actor))
+            this.actors.add(actor);
     }
 
-    public void setCreators(ArrayList<Creator> creators) {
-        this.creators = new ArrayList<Creator>(creators);
+    public void addCreator(Creator creator) {
+        if(!creators.contains(creator))
+            this.creators.add(creator);
     }
 
-    public void setSeasons(ArrayList<Season> seasons) {
-        this.seasons= new ArrayList<Season>(seasons);
+    public void addSeason(Season season) {
+        if(!seasons.contains(season))
+            this.seasons.add(season);
+    }
+
+    public void setSeasons(ArrayList<Season> stagioni){
+        for(int i=0; i<stagioni.size(); i++){
+            if(!seasons.contains(stagioni.get(i)))
+                this.addSeason(stagioni.get(i));
+        }
+    }
+
+    public void setActors(ArrayList<Actor> attori){
+        for(int i=0; i<attori.size(); i++){
+            if(!actors.contains(attori.get(i)))
+                this.addActor(attori.get(i));
+        }
+    }
+
+    public void setCreators(ArrayList<Creator> creatori){
+        for(int i=0; i<creatori.size(); i++){
+            if(!creators.contains(creatori.get(i)))
+                this.addCreator(creatori.get(i));
+        }
     }
     
     public Season getSeason(String title){
