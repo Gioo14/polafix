@@ -1,16 +1,16 @@
 package com.polafix.polafix.pojos;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Charge {
-    public Date date;
+    public LocalDate date;
     public String name;
     public int season;
     public int number;
     public float price;
 
-    public Charge(Date date, String name, int season, int number, float price) {
+    public Charge(LocalDate date, String name, int season, int number, float price) {
         this.date = date;
         this.name = name;
         this.season = season;
@@ -18,7 +18,7 @@ public class Charge {
         this.price = price;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -38,12 +38,15 @@ public class Charge {
         return price;
     }
 
-    public boolean equals(Charge charge){
-        if(this.date.equals(charge.date) && this.name.equals(charge.name) 
-            && this.number==charge.number && this.price==charge.price && this.season==charge.season)
-                return true;
-        else
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Charge)) {
             return false;
+        }
+        Charge charge = (Charge) o;
+        return Objects.equals(date, charge.date) && Objects.equals(name, charge.name) && season == charge.season && number == charge.number && price == charge.price;
     }
 
     @Override

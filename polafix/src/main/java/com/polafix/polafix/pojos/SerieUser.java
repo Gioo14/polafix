@@ -1,27 +1,25 @@
 package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
-public class SerieUtente {
+public class SerieUser {
     public Serie serie;
     public int currentSeason;
     public ArrayList<ChapterSeen> userChapters;
 
-    public SerieUtente(Serie serie, int currentSeason) {
+    public SerieUser(Serie serie, int currentSeason) {
         this.serie = serie;
         this.currentSeason = currentSeason;
-
         this.userChapters = new ArrayList<ChapterSeen>();
+
         ArrayList<Season> seasons = this.serie.getSeasons();
         for(int i=0; i<seasons.size(); i++){
-            System.out.println(seasons.get(i).getTitle());
             ArrayList<Chapter> chapters = seasons.get(i).getChapters();
             for(int j=0; j<chapters.size(); j++){
-                ChapterSeen c = new ChapterSeen(chapters.get(j), ChapterState.PIENDENTE);
+                ChapterSeen c = new ChapterSeen(chapters.get(j), ChapterState.NOTSEEN);
                 userChapters.add(c);
-                System.out.println(chapters.get(j).getTitle()+ " inserito");
-
             }
         }
     }
@@ -55,49 +53,37 @@ public class SerieUtente {
     public void addChapterSeen(Chapter chapter){
         ArrayList<ChapterSeen> chapters = this.getUserChapters();
         ChapterSeen cs = findChapter(chapters, chapter);
-        cs.setState(ChapterState.VISTO);
+        cs.setState(ChapterState.SEEN);
     }
 
-   /* public Chapter getLastChapter(){
+    public Chapter getLastChapter(){
         Chapter c = null;
         int currentseason = this.getCurrentSeason();
-        Map<Chapter, ChapterState> userChapters = this.getUserChapters();
+        ArrayList<ChapterSeen> userChapters = this.getUserChapters();
         Season season = this.getSerie().getSeason(currentseason);
         ArrayList<Chapter> chapters = season.getChapters();
         for(int i=0; i<chapters.size(); i++){
-            c = chapters.get(i);
-            if(userChapters.get(c).equals(ChapterState.PIENDENTE)){
+            if(userChapters.get(i).getState().equals(ChapterState.NOTSEEN)){
+                c = userChapters.get(i).getChapter();
                 return c;
             }
         }
         return c;
     }
 
-    
-    public boolean equals(SerieUtente serieUt){
-        if(this.serie.equals(serieUt.serie) && this.currentSeason==serieUt.currentSeason && chaptersEquals(serieUt.getUserChapters()))
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
             return true;
-        else
+        if (!(o instanceof SerieUser)) {
             return false;
-    }
-
-    private boolean chaptersEquals(Map<Chapter, ChapterState> chapters){
-        for (Map.Entry<Chapter, ChapterState> entry : chapters.entrySet()) {
-            Chapter chapter1 = entry.getKey();
-            ChapterState state1 = entry.getValue();
-            if(!this.userChapters.containsKey(chapter1))
-                return false;
-            else{
-                ChapterState state2 = this.userChapters.get(chapter1);
-                if(!state2.equals(state1))
-                    return false;
-            }
         }
-        return true;
+        SerieUser serieUtente = (SerieUser) o;
+        return Objects.equals(serie, serieUtente.serie) && currentSeason == serieUtente.currentSeason && Objects.equals(userChapters, serieUtente.userChapters);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(serie, currentSeason, userChapters);
-    }*/
+    }
 }

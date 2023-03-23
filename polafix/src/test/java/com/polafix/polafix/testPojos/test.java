@@ -6,12 +6,15 @@ import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 import com.polafix.polafix.pojos.Chapter;
+import com.polafix.polafix.pojos.Charge;
 import com.polafix.polafix.pojos.Season;
 import com.polafix.polafix.pojos.Serie;
+import com.polafix.polafix.pojos.SerieUser;
 import com.polafix.polafix.pojos.Subscripton;
 import com.polafix.polafix.pojos.Type;
 import com.polafix.polafix.pojos.User;
@@ -72,6 +75,7 @@ public class test {
     }
     }
 
+    //Test on the singole method of the User class to see if it's implemented well
     @Test
     public void testUser(){
         Date date = new Date();
@@ -95,13 +99,14 @@ public class test {
         assertEquals(0, utente.getBalance().getAllCharges().size());
     }
 
+    //Test on the singole method of the Serie class to see if it's implemented well
     @Test
     public void testSerie(){
         Serie lost = new Serie(serieName, typeSerie, description);
-        Season lost1 = new Season("Lost1", 1, lost);
-        Chapter lost1_1 = new Chapter(1, "lost1_1", description, lost1);
-        Chapter lost1_2 = new Chapter(2, "lost1_2", description, lost1);
-        Chapter lost1_3 = new Chapter(3, "lost1_3", description, lost1);
+        Season lost1 = new Season("Lost1", 1);
+        Chapter lost1_1 = new Chapter(1, "lost1_1", description);
+        Chapter lost1_2 = new Chapter(2, "lost1_2", description);
+        Chapter lost1_3 = new Chapter(3, "lost1_3", description);
         ArrayList<Chapter> chapters = new ArrayList<Chapter>();
         chapters.add(lost1_1);
         chapters.add(lost1_2);
@@ -122,6 +127,7 @@ public class test {
 
     @Test
     public void aggiungiSerie(){
+        //Create a new user
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat(date_string);
         try {
@@ -131,11 +137,12 @@ public class test {
           }
         User utente = new User(email, type, IBAN, name, surname, date);
 
+        //Create a new serie
         Serie lost = new Serie(serieName, typeSerie, description);
-        Season lost1 = new Season("Lost1", 1, lost);
-        Chapter lost1_1 = new Chapter(1, "lost1_1", description, lost1);
-        Chapter lost1_2 = new Chapter(2, "lost1_2", description, lost1);
-        Chapter lost1_3 = new Chapter(3, "lost1_3", description, lost1);
+        Season lost1 = new Season("Lost1", 1);
+        Chapter lost1_1 = new Chapter(1, "lost1_1", description);
+        Chapter lost1_2 = new Chapter(2, "lost1_2", description);
+        Chapter lost1_3 = new Chapter(3, "lost1_3", description);
         ArrayList<Chapter> chapters = new ArrayList<Chapter>();
         chapters.add(lost1_1);
         chapters.add(lost1_2);
@@ -144,12 +151,23 @@ public class test {
 
         //User add a serie in his lists of series
         utente.addSerie(lost);
+        SerieUser serieUtente = new SerieUser(lost, 1);
         assertEquals(1, utente.getInlist().size());
-        assertEquals(0, utente.getEnded().size());
-        assertEquals(0, utente.getStarted().size());
+        assertEquals(serieUtente, utente.getInlist().get(0));
 
-        //User add chapter visto
+        //User select a chapter: the chapter state change and the chapter is added at the balance
+        utente.selectChapter(lost, lost1, lost1_1);
+        serieUtente.addChapterSeen(lost1_1);
+        Charge expected = new Charge(LocalDate.now(), lost.getName(), 1, 1, lost.getType().getprice());
+        assertEquals(1, utente.getStarted().size());
+        assertEquals(1, utente.getBalance().getAllCharges().size());
+        assertEquals(expected, utente.getBalance().getAllCharges().get(0));
+        assertEquals(serieUtente, utente.getStarted().get(0));
+        assertEquals(serieUtente, utente.viewSerieUtente(utente.getStarted(), "Lost"));
         
+        //User visualize the serie from the list
+        Chapter c = utente.viewLastChapter(serieUtente);
+        assertEquals(lost1_2, c);
     }
 
 }

@@ -6,11 +6,8 @@ public class Chapter {
     public int number;
     public String title;
     public String description;
-    public Season season;
 
-    public Chapter(int number, String title, String description, Season season) {
-        this.season=season;
-        //this.serie=season.getSerie();
+    public Chapter(int number, String title, String description) {
         setNumber(number);
         setTitle(title);
         setDescription(description);
@@ -28,10 +25,6 @@ public class Chapter {
         return description;
     }
 
-    public Season getSeason() {
-        return season;
-    }
-
     public void setNumber(int number) {
         this.number = number;
     }
@@ -44,15 +37,19 @@ public class Chapter {
         this.title = title;
     }
 
-    public boolean equals(Chapter chapter){
-        if(this.title.equals(chapter.title) && this.number==(chapter.number) && this.season.equals(chapter.season))
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
             return true;
-        else
+        if (!(o instanceof Chapter)) {
             return false;
+        }
+        Chapter chapter = (Chapter) o;
+        return number == chapter.number && Objects.equals(title, chapter.title) && Objects.equals(description, chapter.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(number, title, description, season);
+        return Objects.hash(number, title, description);
     }
 }

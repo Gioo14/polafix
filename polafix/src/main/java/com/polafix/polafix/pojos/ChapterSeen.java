@@ -1,5 +1,7 @@
 package com.polafix.polafix.pojos;
 
+import java.util.Objects;
+
 public class ChapterSeen {
     public Chapter chapter;
     public ChapterState state;
@@ -20,5 +22,21 @@ public class ChapterSeen {
     }
     public void setState(ChapterState state) {
         this.state = state;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof ChapterSeen)) {
+            return false;
+        }
+        ChapterSeen chapterSeen = (ChapterSeen) o;
+        return Objects.equals(chapter, chapterSeen.chapter) && Objects.equals(state, chapterSeen.state);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(chapter, state);
     }
 }

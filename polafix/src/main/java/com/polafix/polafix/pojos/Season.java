@@ -5,12 +5,10 @@ import java.util.Objects;
 
 public class Season {
     public String title;
-    public Serie serie;
     public int number;
     public ArrayList<Chapter> chapters;
 
-    public Season(String title, int number, Serie serie) {
-        this.serie=serie;
+    public Season(String title, int number) {
         setTitle(title);
         setNumber(number);
         this.chapters = new ArrayList<Chapter>();
@@ -59,20 +57,21 @@ public class Season {
         return null;
     }
 
-    public Serie getSerie(){
-        return this.serie;
-    }
-
-    public boolean equals(Season season){
-        if(this.serie.equals(season.serie) && (this.title.equals(season.title)) && (this.number==season.number))
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
             return true;
-        else
+        if (!(o instanceof Season)) {
             return false;
+        }
+        Season season = (Season) o;
+        return Objects.equals(title, season.title) && number == season.number && Objects.equals(chapters, season.chapters);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, serie, number, chapters);
+        return Objects.hash(title, number, chapters);
     }
+
 
 }

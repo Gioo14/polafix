@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Creator {
+    public String creatorId;
     public String name;
     public String surname;
     public ArrayList<Serie> series;
-   
-    public Creator(String name, String surname, ArrayList<Serie> series) {
+
+    public Creator(String creatorId, String name, String surname, ArrayList<Serie> series) {
+        this.creatorId = creatorId;
         this.name = name;
         this.surname = surname;
         setSeries(series);
+    }
+
+    public String getCreatorId() {
+        return creatorId;
     }
     
     public String getName() {
@@ -30,15 +36,20 @@ public class Creator {
         this.getSeries().add(serie);
     }
 
-    public boolean equals(Creator creator){
-        if(this.name.equals(creator.name) && this.surname.equals(creator.surname))
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
             return true;
-        else
+        if (!(o instanceof Creator)) {
             return false;
+        }
+        Creator creator = (Creator) o;
+        return Objects.equals(creatorId, creator.creatorId) && Objects.equals(name, creator.name) && Objects.equals(surname, creator.surname) && Objects.equals(series, creator.series);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, surname, series);
+        return Objects.hash(creatorId, name, surname, series);
     }
+   
 }

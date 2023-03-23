@@ -1,25 +1,24 @@
 package com.polafix.polafix.pojos;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 public class Balance {
-    public float saldo;
+    public float balance;
     public ArrayList<Charge> charges=new ArrayList<Charge>();
 
-    public Balance(float saldo, ArrayList<Charge> charges) {
-        this.saldo = saldo;
+    public Balance(float balance, ArrayList<Charge> charges) {
+        this.balance = balance;
         this.charges = charges;
     }
 
     public float getSaldo() {
-        return saldo;
+        return balance;
     }
 
     public void setSaldo(float amount){
-        saldo = amount;
+        balance = amount;
     }
 
     public ArrayList<Charge> getAllCharges() {
@@ -29,13 +28,11 @@ public class Balance {
     public ArrayList<Charge> getCharges(int month, int year){
         ArrayList<Charge> charges = getAllCharges();
         ArrayList<Charge> chargesInDate = new ArrayList<Charge>();
-        Calendar calendario = Calendar.getInstance();
 
         for(int i=0; i<charges.size(); i++){
-            Date date = charges.get(i).getDate();
-            calendario.setTime(date);
-            int mese = calendario.get(Calendar.MONTH) + 1; //il mese è indicizzato da 0 a 11
-            int anno = calendario.get(Calendar.YEAR);
+            LocalDate date = charges.get(i).getDate();
+            int anno = date.getYear();
+            int mese = date.getMonthValue();
             if(year==anno && mese==month){
                 chargesInDate.add(charges.get(i));
             }
@@ -47,16 +44,20 @@ public class Balance {
         this.getAllCharges().add(charge);
     }
 
-    public boolean equals(Balance balance){
-        if(this.saldo==balance.getSaldo() && this.charges.equals(balance.getAllCharges()))
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
             return true;
-        else
+        if (!(o instanceof Balance)) {
             return false;
+        }
+        Balance b = (Balance) o;
+        return balance == b.balance && Objects.equals(charges, b.charges);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(saldo, charges);
+        return Objects.hash(balance, charges);
     }
 
 }

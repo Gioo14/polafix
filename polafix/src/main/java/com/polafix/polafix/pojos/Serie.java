@@ -118,27 +118,15 @@ public class Serie {
         return season.getChapter(number);
     }
 
-    public boolean equals(Serie serie){
-        if(this.name.equals(serie.name) && equalsActors(serie.getActors()) && equalsCreators(serie.getCreators()))
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
             return true;
-        else
+        if (!(o instanceof Serie)) {
             return false;
-    }
-
-    private boolean equalsActors(ArrayList<Actor> actors){
-        for(int i=0; i<actors.size(); i++){
-            if(!this.actors.contains(actors.get(i)))
-                return false;
         }
-        return true;
-    }
-
-    private boolean equalsCreators(ArrayList<Creator> creators){
-        for(int i=0; i<creators.size(); i++){
-            if(!this.creators.contains(creators.get(i)))
-                return false;
-        }
-        return true;
+        Serie serie = (Serie) o;
+        return Objects.equals(name, serie.name) && Objects.equals(type, serie.type) && Objects.equals(shortDescription, serie.shortDescription) && Objects.equals(seasons, serie.seasons) && Objects.equals(actors, serie.actors) && Objects.equals(creators, serie.creators);
     }
 
     @Override
