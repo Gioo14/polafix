@@ -1,47 +1,54 @@
 package com.polafix.polafix.pojos;
 
-import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Balance {
-    public float balance;
-    public ArrayList<Charge> charges=new ArrayList<Charge>();
+    private float amount;
+    private Month month;
+    private int year;
+    private ArrayList<Charge> charges;
 
-    public Balance(float balance, ArrayList<Charge> charges) {
-        this.balance = balance;
-        this.charges = charges;
+    public Balance(float amount, Month month, int year) {
+        this.month = month;
+        this.year = year;
+        this.amount = amount;
+        this.charges = new ArrayList<Charge>();
     }
 
-    public float getSaldo() {
-        return balance;
+    public float getAmount() {
+        return amount;
     }
 
-    public void setSaldo(float amount){
-        balance = amount;
+    public void setAmount(float amount){
+        this.amount = amount;
+    }
+
+    public Month getMonth() {
+        return month;
+    }
+
+    public void setMonth(Month month) {
+        this.month = month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public ArrayList<Charge> getAllCharges() {
         return charges;
     }
 
-    public ArrayList<Charge> getCharges(int month, int year){
-        ArrayList<Charge> charges = getAllCharges();
-        ArrayList<Charge> chargesInDate = new ArrayList<Charge>();
-
-        for(int i=0; i<charges.size(); i++){
-            LocalDate date = charges.get(i).getDate();
-            int anno = date.getYear();
-            int mese = date.getMonthValue();
-            if(year==anno && mese==month){
-                chargesInDate.add(charges.get(i));
-            }
-        }
-        return chargesInDate;
-    }
-
     public void addCharge(Charge charge){
         this.getAllCharges().add(charge);
+        float newAmount = this.getAmount() + charge.getPrice();
+        setAmount(newAmount);
     }
 
     @Override
@@ -51,13 +58,12 @@ public class Balance {
         if (!(o instanceof Balance)) {
             return false;
         }
-        Balance b = (Balance) o;
-        return balance == b.balance && Objects.equals(charges, b.charges);
+        Balance balance = (Balance) o;
+        return amount == balance.amount && Objects.equals(month, balance.month) && year == balance.year && Objects.equals(charges, balance.charges);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(balance, charges);
+        return Objects.hash(amount, month, year, charges);
     }
-
 }

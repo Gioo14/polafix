@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Serie {
+    public String idSerie;
     public String name;
     public Type type;
     public String shortDescription;
@@ -11,7 +12,7 @@ public class Serie {
     public ArrayList<Actor> actors;
     public ArrayList<Creator> creators;
 
-    public Serie(String name, Type type, String shortDescription) {
+    public Serie(String idSerie, String name, Type type, String shortDescription) {
         setName(name);
         setType(type);
         setDescription(shortDescription);
@@ -54,6 +55,14 @@ public class Serie {
 
     public void setDescription(String shortDescription) {
         this.shortDescription = shortDescription;
+    }
+
+    public String getIdSerie() {
+        return this.idSerie;
+    }
+
+    public void setIdSerie(String idSerie) {
+        this.idSerie = idSerie;
     }
 
     public void addActor(Actor actor) {
@@ -101,10 +110,6 @@ public class Serie {
         return null;
     }
 
-    public Chapter getChapter(Season season, String title){
-        return season.getChapter(title);
-    }
-
     public Season getSeason(int number){
         for(int i=0; i<this.getSeasons().size(); i++){
             if(this.getSeasons().get(i).getNumber()==number){
@@ -126,11 +131,11 @@ public class Serie {
             return false;
         }
         Serie serie = (Serie) o;
-        return Objects.equals(name, serie.name) && Objects.equals(type, serie.type) && Objects.equals(shortDescription, serie.shortDescription) && Objects.equals(seasons, serie.seasons) && Objects.equals(actors, serie.actors) && Objects.equals(creators, serie.creators);
+        return Objects.equals(idSerie, serie.idSerie);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, type, shortDescription, seasons, actors, creators);
+        return Objects.hash(idSerie, name, type, shortDescription, seasons, actors, creators);
     }
 }

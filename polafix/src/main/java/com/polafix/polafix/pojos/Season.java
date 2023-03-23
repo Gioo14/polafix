@@ -39,15 +39,6 @@ public class Season {
             this.chapters.add(chapter);
     }
 
-    public Chapter getChapter(String title){
-        for(int i=0; i<this.getChapters().size(); i++){
-            if(this.getChapters().get(i).getTitle().equals(title)){
-                return this.getChapters().get(i);
-            }
-        }
-        return null;
-    }
-
     public Chapter getChapter(int number){
         for(int i=0; i<this.getChapters().size(); i++){
             if(this.getChapters().get(i).getNumber()==number){
@@ -72,6 +63,4 @@ public class Season {
     public int hashCode() {
         return Objects.hash(title, number, chapters);
     }
-
-
 }

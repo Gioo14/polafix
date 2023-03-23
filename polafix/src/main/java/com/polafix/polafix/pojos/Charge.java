@@ -53,5 +53,4 @@ public class Charge {
     public int hashCode() {
         return Objects.hash(date, name, season, number, price);
     }
-
 }

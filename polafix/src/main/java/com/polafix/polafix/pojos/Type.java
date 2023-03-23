@@ -2,9 +2,9 @@ package com.polafix.polafix.pojos;
 
 public enum Type {
    
-    GOLD(1.0f),
-    SILVER(0.0f),
-    STANDARD(2.0f);
+    GOLD(1.5f),
+    SILVER(0.75f),
+    STANDARD(0.5f);
 
     private final float price;
 
