@@ -14,7 +14,7 @@ public class ManagePaiment {
 
     private User getUser(String userId){
         for(int i=0; i<users.size(); i++){
-            if(this.users.get(i).getUserID().equals(userId)){
+            if(this.users.get(i).getEmail().equals(userId)){
                 User user = this.users.get(i);
                 return user;
             }

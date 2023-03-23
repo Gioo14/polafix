@@ -1,22 +1,29 @@
 package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 
 public class SerieUtente {
     public Serie serie;
     public int currentSeason;
-
-    public HashMap<Chapter, ChapterState> userChapters;
+    public ArrayList<ChapterSeen> userChapters;
 
     public SerieUtente(Serie serie, int currentSeason) {
         this.serie = serie;
         this.currentSeason = currentSeason;
-        setChapters(serie);
-        //this.userChapters = userChapters;
+
+        this.userChapters = new ArrayList<ChapterSeen>();
+        ArrayList<Season> seasons = this.serie.getSeasons();
+        for(int i=0; i<seasons.size(); i++){
+            System.out.println(seasons.get(i).getTitle());
+            ArrayList<Chapter> chapters = seasons.get(i).getChapters();
+            for(int j=0; j<chapters.size(); j++){
+                ChapterSeen c = new ChapterSeen(chapters.get(j), ChapterState.PIENDENTE);
+                userChapters.add(c);
+                System.out.println(chapters.get(j).getTitle()+ " inserito");
+
+            }
+        }
     }
 
     public Serie getSerie() {
@@ -31,30 +38,30 @@ public class SerieUtente {
         this.currentSeason = currentSeason;
     }
 
-    public HashMap<Chapter, ChapterState> getUserChapters() {
+    public ArrayList<ChapterSeen> getUserChapters() {
         return userChapters;
     }
 
-    public void setChapters(Serie serie){
-        HashMap<Chapter, ChapterState> userChapters = new HashMap<Chapter, ChapterState>();
-        ArrayList<Season> seasons = serie.getSeasons();
-        for(int i=0; i<seasons.size(); i++){
-            ArrayList<Chapter> chapters = seasons.get(i).getChapters();
-            for(int j=0; j<chapters.size(); j++){
-                userChapters.put(chapters.get(j), ChapterState.PIENDENTE);
-            }
+    private ChapterSeen findChapter(ArrayList<ChapterSeen> chapters, Chapter chapter){
+        ChapterSeen cs = null;
+        for(int i=0; i<chapters.size(); i++){
+            cs = chapters.get(i);
+            if(cs.getChapter().equals(chapter))
+                return cs;
         }
+        return cs;
     }
 
-    public void addChapterVisto(Chapter chapter){
-        HashMap<Chapter, ChapterState> chapters = this.getUserChapters();
-        chapters.replace(chapter, ChapterState.VISTO);
+    public void addChapterSeen(Chapter chapter){
+        ArrayList<ChapterSeen> chapters = this.getUserChapters();
+        ChapterSeen cs = findChapter(chapters, chapter);
+        cs.setState(ChapterState.VISTO);
     }
 
-    public Chapter getLastChapter(){
+   /* public Chapter getLastChapter(){
         Chapter c = null;
         int currentseason = this.getCurrentSeason();
-        HashMap<Chapter, ChapterState> userChapters = this.getUserChapters();
+        Map<Chapter, ChapterState> userChapters = this.getUserChapters();
         Season season = this.getSerie().getSeason(currentseason);
         ArrayList<Chapter> chapters = season.getChapters();
         for(int i=0; i<chapters.size(); i++){
@@ -74,7 +81,7 @@ public class SerieUtente {
             return false;
     }
 
-    private boolean chaptersEquals(HashMap<Chapter, ChapterState> chapters){
+    private boolean chaptersEquals(Map<Chapter, ChapterState> chapters){
         for (Map.Entry<Chapter, ChapterState> entry : chapters.entrySet()) {
             Chapter chapter1 = entry.getKey();
             ChapterState state1 = entry.getValue();
@@ -92,5 +99,5 @@ public class SerieUtente {
     @Override
     public int hashCode() {
         return Objects.hash(serie, currentSeason, userChapters);
-    }
+    }*/
 }

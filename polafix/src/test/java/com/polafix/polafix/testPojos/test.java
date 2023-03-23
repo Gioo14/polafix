@@ -4,7 +4,11 @@ package com.polafix.polafix.testPojos;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import com.polafix.polafix.pojos.Chapter;
 import com.polafix.polafix.pojos.Season;
 import com.polafix.polafix.pojos.Serie;
@@ -16,11 +20,12 @@ public class test {
     private ArrayList<User> users = new ArrayList<User>();
     private ArrayList<Serie> series = new ArrayList<Serie>();
 
-    private String userId = "AABB1122";
+    private String email = "anna.bianchi@gmail.com";
     private Subscripton type = Subscripton.NOTSUBSCRIBED;
     private String name ="ANNA";
     private String surname = "BIANCHI";
     private String IBAN = "xxxxxxxxxxxxx";
+    private String date_string = "20/09/1990";
 
     private String serieName = "Lost";
     private Type typeSerie = Type.SILVER;
@@ -69,11 +74,25 @@ public class test {
 
     @Test
     public void testUser(){
-        User utente = new User(userId, type, IBAN, name, surname);
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat(date_string);
+        try {
+            date = formatter.parse(date_string);
+          } catch (ParseException e) {
+            e.printStackTrace();
+          }
+        User utente = new User(email, type, IBAN, name, surname, date);
 
         assertEquals(true, addUser(utente));
-        assertEquals("AABB1122" ,utente.getUserID());
+        assertEquals("anna.bianchi@gmail.com" ,utente.getEmail());
         assertEquals(Subscripton.NOTSUBSCRIBED, utente.getType());
+
+        assertEquals(0, utente.getInlist().size());
+        assertEquals(0, utente.getEnded().size());
+        assertEquals(0, utente.getStarted().size());
+
+        assertEquals(0.00, utente.getBalance().getSaldo());
+        assertEquals(0, utente.getBalance().getAllCharges().size());
     }
 
     @Test
@@ -93,12 +112,44 @@ public class test {
         assertEquals(true, addSerie(lost));
         assertEquals("Lost", lost.getName());
         assertEquals(Type.SILVER, lost.getType());
+
+        assertEquals(1, lost.getSeasons().size());
+        assertEquals(3, lost.getSeason(1).getChapters().size());
+        assertEquals("lost1_1", lost.getSeason(1).getChapter(1).getTitle());
+        assertEquals("lost1_2", lost.getSeason(1).getChapter(2).getTitle());
+        assertEquals("lost1_3", lost.getSeason(1).getChapter(3).getTitle());
     }
 
     @Test
-    public void watchSerie(){
-        User user = users.get(0);
-        Serie serie = series.get(0);
+    public void aggiungiSerie(){
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat(date_string);
+        try {
+            date = formatter.parse(date_string);
+          } catch (ParseException e) {
+            e.printStackTrace();
+          }
+        User utente = new User(email, type, IBAN, name, surname, date);
+
+        Serie lost = new Serie(serieName, typeSerie, description);
+        Season lost1 = new Season("Lost1", 1, lost);
+        Chapter lost1_1 = new Chapter(1, "lost1_1", description, lost1);
+        Chapter lost1_2 = new Chapter(2, "lost1_2", description, lost1);
+        Chapter lost1_3 = new Chapter(3, "lost1_3", description, lost1);
+        ArrayList<Chapter> chapters = new ArrayList<Chapter>();
+        chapters.add(lost1_1);
+        chapters.add(lost1_2);
+        chapters.add(lost1_3);
+        setSerie(lost, lost1, chapters);
+
+        //User add a serie in his lists of series
+        utente.addSerie(lost);
+        assertEquals(1, utente.getInlist().size());
+        assertEquals(0, utente.getEnded().size());
+        assertEquals(0, utente.getStarted().size());
+
+        //User add chapter visto
+        
     }
 
 }

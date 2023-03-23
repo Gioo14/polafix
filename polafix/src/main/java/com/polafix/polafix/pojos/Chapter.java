@@ -7,11 +7,10 @@ public class Chapter {
     public String title;
     public String description;
     public Season season;
-    public Serie serie;
 
     public Chapter(int number, String title, String description, Season season) {
         this.season=season;
-        this.serie=season.getSerie();
+        //this.serie=season.getSerie();
         setNumber(number);
         setTitle(title);
         setDescription(description);
@@ -45,10 +44,6 @@ public class Chapter {
         this.title = title;
     }
 
-    public Serie getSerie(){
-        return season.getSerie();
-    }
-
     public boolean equals(Chapter chapter){
         if(this.title.equals(chapter.title) && this.number==(chapter.number) && this.season.equals(chapter.season))
             return true;
@@ -58,6 +53,6 @@ public class Chapter {
 
     @Override
     public int hashCode() {
-        return Objects.hash(number, title, description, season, serie);
+        return Objects.hash(number, title, description, season);
     }
 }
