@@ -1,7 +1,7 @@
 package com.polafix.polafix.testPojos;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
@@ -150,38 +150,37 @@ public class test {
 
         //User add a serie in his lists of series
         utente.addSerie(lost);
-        SerieUser serieUtente = new SerieUser(lost, 1);
+        SerieUser lost_user = new SerieUser(lost);
         //serieUtente.addChapterSeen(lost1, lost1_1);
         assertEquals(1, utente.getInlist().size());
-        assertEquals(serieUtente, utente.getInlist().get(0));
+        assertEquals(0, utente.getStarted().size());
+        assertEquals(0, utente.getEnded().size());
+        assertEquals(lost_user, utente.getInlist().get(0));
 
         //User select a chapter: the chapter state change and the chapter is added at the balance
-        utente.selectChapter(lost, lost1, lost1_1);
+        utente.selectChapter(lost_user, 1, 1);
         assertEquals(1, utente.getStarted().size());
+        assertEquals(0, utente.getInlist().size());
         Charge expected = new Charge(LocalDate.now(), lost.getName(), 1, 1, lost.getType().getprice());
         assertEquals(1, utente.getLastBalance().getAllCharges().size());
         assertEquals(expected, utente.getLastBalance().getAllCharges().get(0));
-        assertEquals(serieUtente, utente.getStarted().get(0));
-        assertEquals(1, serieUtente.getNextChapter().getNumSeason());
-        assertEquals(2, serieUtente.getNextChapter().getNumChapter());
-        assertEquals(serieUtente, utente.viewSerieUser(utente.getStarted(), "Lost"));
+        assertEquals(lost_user.getSerie(), utente.getStarted().get(0).getSerie());
         
-        //User visualize the serie from the list
-        Chapter c = utente.viewLastChapter(serieUtente);
-        System.out.print(c.getTitle());
-        assertEquals(lost1_2, c);
+        assertEquals(lost_user, utente.viewSerieUser(utente.getStarted(), "Lost"));
+        
+        //Verify state chapters
+        lost_user.addChapterSeen(1, 1);
+        assertEquals(lost_user.getUserChapters(), utente.getStarted().get(0).getUserChapters());
 
         //View last chapter -> verify ended
-        utente.selectChapter(lost, lost1, lost1_3);
-        serieUtente.addChapterSeen(lost1, lost1_3);
+        utente.selectChapter(lost_user, 1, 3);
         expected = new Charge(LocalDate.now(), lost.getName(), 1, 3, lost.getType().getprice());
         assertEquals(1, utente.getEnded().size());
-        assertEquals(serieUtente, utente.getEnded().get(0));
+        assertEquals(lost_user.getSerie(), utente.getEnded().get(0).getSerie());
 
         //Verify started and inlist are empty
         assertEquals(0, utente.getStarted().size());
         assertEquals(0, utente.getInlist().size());
-
         assertEquals(1.50, utente.getLastBalance().getAmount());
     }
 
@@ -229,4 +228,74 @@ public class test {
         assertEquals(0.75, bf.getAmount());
     }
 
+    @Test
+    public void testMoreSeasons(){
+        //Create a new user
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat(date_string);
+        try {
+            date = formatter.parse(date_string);
+          } catch (ParseException e) {
+            e.printStackTrace();
+          }
+        User utente = new User(email, type, IBAN, name, surname, date);
+
+        //Create a new serie
+        Serie lost = new Serie(idSerie, serieName, typeSerie, description);
+
+        //Season 1
+        Season lost1 = new Season("Lost1", 1);
+        Chapter lost1_1 = new Chapter(1, "lost1_1", description);
+        Chapter lost1_2 = new Chapter(2, "lost1_2", description);
+        Chapter lost1_3 = new Chapter(3, "lost1_3", description);
+        ArrayList<Chapter> chapters = new ArrayList<Chapter>();
+        chapters.add(lost1_1);
+        chapters.add(lost1_2);
+        chapters.add(lost1_3);
+        setSerie(lost, lost1, chapters);
+
+        //Season 2
+        Season lost2 = new Season("Lost2", 2);
+        Chapter lost2_1 = new Chapter(1, "lost2_1", description);
+        Chapter lost2_2 = new Chapter(2, "lost2_2", description);
+        Chapter lost2_3 = new Chapter(3, "lost2_3", description);
+        ArrayList<Chapter> chapters2 = new ArrayList<Chapter>();
+        chapters2.add(lost2_1);
+        chapters2.add(lost2_2);
+        chapters2.add(lost2_3);
+        setSerie(lost, lost2, chapters2);
+
+        //User add a serie in his lists of series
+        utente.addSerie(lost);
+        SerieUser lost_user = new SerieUser(lost);
+        assertEquals("Lost1", lost_user.getSerie().getSeason(1).getTitle());
+        assertEquals("Lost2", lost_user.getSerie().getSeason(2).getTitle());
+        assertEquals(3, lost_user.getSerie().getSeason(1).getChapters().size());
+        assertEquals(3, lost_user.getSerie().getSeason(2).getChapters().size());
+        //serieUtente.addChapterSeen(lost1, lost1_1);
+        assertEquals(1, utente.getInlist().size());
+        assertEquals(0, utente.getStarted().size());
+        assertEquals(0, utente.getEnded().size());
+        assertEquals(lost_user, utente.getInlist().get(0));
+
+        //User select a chapter: the chapter state change and the chapter is added at the balance
+        utente.selectChapter(lost_user, 1, 3);
+        assertEquals(0, utente.getInlist().size());
+        assertEquals(1, utente.getStarted().size());
+        assertEquals(0, utente.getEnded().size());
+        assertEquals(2, utente.getStarted().get(0).getCurrentSeason());
+
+        //User select a chapter: the chapter state change and the chapter is added at the balance
+        utente.selectChapter(lost_user, 2, 3);
+        assertEquals(0, utente.getInlist().size());
+        assertEquals(0, utente.getStarted().size());
+        assertEquals(1, utente.getEnded().size());
+        assertEquals(1, utente.getEnded().get(0).getCurrentSeason());
+
+        utente.selectChapter(lost_user, 2, 1);
+        assertEquals(0, utente.getInlist().size());
+        assertEquals(0, utente.getStarted().size());
+        assertEquals(1, utente.getEnded().size());
+        assertEquals(2, utente.getEnded().get(0).getCurrentSeason());
+    }
 }

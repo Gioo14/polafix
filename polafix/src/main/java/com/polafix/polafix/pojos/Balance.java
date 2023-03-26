@@ -65,11 +65,11 @@ public class Balance {
             return false;
         }
         Balance balance = (Balance) o;
-        return amount == balance.amount && Objects.equals(month, balance.month) && year == balance.year && Objects.equals(charges, balance.charges);
+        return Objects.equals(month, balance.month) && year == balance.year;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(amount, month, year, charges);
+        return Objects.hash(month, year);
     }
 }

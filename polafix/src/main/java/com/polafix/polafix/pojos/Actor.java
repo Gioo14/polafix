@@ -5,21 +5,15 @@ import java.util.Objects;
 
 public class Actor {
 
-    private String actorId;
     private String name;
     private String surname;
 
     public ArrayList<Serie> series;
 
-    public Actor(String actorId, String name, String surname, ArrayList<Serie> series) {
-        this.actorId = actorId;
+    public Actor(String name, String surname, ArrayList<Serie> series) {
         this.name = name;
         this.surname = surname;
         setSeries(series);
-    }
-    
-    public String getActorId() {
-        return actorId;
     }
 
     public String getName() {
@@ -50,11 +44,11 @@ public class Actor {
             return false;
         }
         Actor actor = (Actor) o;
-        return Objects.equals(actorId, actor.actorId) && Objects.equals(name, actor.name) && Objects.equals(surname, actor.surname) && Objects.equals(series, actor.series);
+        return Objects.equals(name, actor.name) && Objects.equals(surname, actor.surname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(actorId, name, surname, series);
+        return Objects.hash(name, surname);
     }
 }

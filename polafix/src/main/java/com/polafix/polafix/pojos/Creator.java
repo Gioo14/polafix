@@ -7,20 +7,14 @@ import javax.persistence.Entity;
 
 @Entity
 public class Creator {
-    private String creatorId;
     private String name;
     private String surname;
     private ArrayList<Serie> series;
 
-    public Creator(String creatorId, String name, String surname, ArrayList<Serie> series) {
-        this.creatorId = creatorId;
+    public Creator(String name, String surname, ArrayList<Serie> series) {
         this.name = name;
         this.surname = surname;
         setSeries(series);
-    }
-
-    public String getCreatorId() {
-        return creatorId;
     }
     
     public String getName() {
@@ -47,12 +41,12 @@ public class Creator {
             return false;
         }
         Creator creator = (Creator) o;
-        return Objects.equals(creatorId, creator.creatorId) && Objects.equals(name, creator.name) && Objects.equals(surname, creator.surname) && Objects.equals(series, creator.series);
+        return Objects.equals(name, creator.name) && Objects.equals(surname, creator.surname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(creatorId, name, surname, series);
+        return Objects.hash(name, surname, series);
     }
    
 }

@@ -133,12 +133,12 @@ public class User {
         return balances.get(balances.size()-1);
     }
 
-    private void addCharge(Serie serie, Season season, Chapter chapter){
+    private void addCharge(SerieUser serie, int season, int chapter){
         LocalDate date = LocalDate.now();
         Month month = date.getMonth();
         int year = date.getYear();
         Balance lastBalance = getLastBalance();
-        Charge charge = new Charge(date, serie.getName(), season.getNumber(), chapter.getNumber(), serie.getType().getprice());
+        Charge charge = new Charge(date, serie.getSerie().getName(), season, chapter, serie.getSerie().getType().getprice());
         if(lastBalance.getMonth().equals(month) && year==lastBalance.getYear()){
             lastBalance.addCharge(charge);
         }else{
@@ -147,9 +147,18 @@ public class User {
         }
     } 
     
+    private boolean isInListUser(SerieUser serie, ArrayList<SerieUser> lista){
+        for(SerieUser s : lista){
+            if(s.getSerie().getName().equals(serie.getSerie().getName())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean isInList(Serie serie, ArrayList<SerieUser> lista){
-        for(int i=0; i<lista.size(); i++){
-            if(lista.get(i).getSerie().equals(serie)){
+        for(SerieUser s : lista){
+            if(s.getSerie().getName().equals(serie.getName())){
                 return true;
             }
         }
@@ -158,73 +167,62 @@ public class User {
 
     public void addSerie(Serie serie){
         if(isInList(serie, inlist)==false && isInList(serie, ended)==false && isInList(serie, started)==false){
-            SerieUser serieuser = new SerieUser(serie, 1);
+            SerieUser serieuser = new SerieUser(serie);
             inlist.add(serieuser);
         }
     }
 
-    private SerieUser getSerieUser(ArrayList<SerieUser> lista, Serie serie){
-        for(int i=0; i<lista.size(); i++){
-            if(lista.get(i).getSerie().equals(serie)){
-                return lista.get(i);
-            }
-        }
-        return null; // sistema!!!
-    } 
-
-    private boolean isLastChapter(Serie serie, Season season, Chapter chapter){
-        int lastSeason = serie.getSeasons().size();
-        int lastChapter = season.getChapters().size();
-        if(lastSeason==season.getNumber() && lastChapter==chapter.getNumber())
-            return true;
-        else
-            return false;
+    private boolean isLastChapter(SerieUser serie, ChapterSeen chapter){
+        return serie.isLastChapter(chapter);
     }
 
-    public void selectChapter(Serie serie, Season season, Chapter chapter){
-        addSerie(serie);
-        if(isInList(serie, inlist)){
-            SerieUser serieutente = getSerieUser(inlist, serie);
-            serieutente.addChapterSeen(season, chapter);
-            serieutente.setCurrentSeason(season.getNumber());
-            serieutente.setNextChapter(serieutente.findChapter(serieutente.getUserChapters(), season.getNumber(), chapter.getNumber()));
+    private SerieUser getSerieUser(ArrayList<SerieUser> lista, SerieUser serie){
+        for (SerieUser serieUser : lista) {
+            if(serieUser.getSerie().equals(serie.getSerie()))
+                return serieUser;
+        }
+        return null;
+    }
+
+    public void selectChapter(SerieUser s, int season, int chapter){
+        if(isInListUser(s, inlist)){
+            SerieUser serie = getSerieUser(inlist, s);
+            ChapterSeen c = serie.findChapter(serie.getUserChapters(), season, chapter);
+            serie.addChapterSeen(season, chapter);
+            int num_chapters = serie.getSerie().getSeason(season).getChapters().size();
+            serie.setNextSeason(c, num_chapters);
             this.addCharge(serie, season, chapter);
-            if(isLastChapter(serie, season, chapter)){
-                ended.add(serieutente);
-                inlist.remove(serieutente);
-                serieutente.setCurrentSeason(1);
+            if(isLastChapter(serie, c)){
+                inlist.remove(serie);
+                ended.add(serie);
             }
             else{
-                started.add(serieutente);
-                inlist.remove(serieutente);
+                inlist.remove(serie);
+                started.add(serie);    
             }  
         }
         else{
-            if(isInList(serie, started)){
-                SerieUser serieutente = getSerieUser(started, serie);
-                serieutente.addChapterSeen(season, chapter);
-                serieutente.setCurrentSeason(season.getNumber());
-                serieutente.setNextChapter(serieutente.findChapter(serieutente.getUserChapters(), season.getNumber(), chapter.getNumber()));
+            if(isInListUser(s, started)){
+                SerieUser serie = getSerieUser(started, s);
+                ChapterSeen c = serie.findChapter(serie.getUserChapters(), season, chapter);
+                serie.addChapterSeen(season, chapter);
+                int num_chapters = serie.getSerie().getSeason(season).getChapters().size();
+                serie.setNextSeason(c, num_chapters);
                 this.addCharge(serie, season, chapter);
-                if(isLastChapter(serie, season, chapter)){
-                    ended.add(serieutente);
-                    started.remove(serieutente);
-                    serieutente.setCurrentSeason(1);
+                if(isLastChapter(serie, c)){
+                    ended.add(serie);
+                    started.remove(serie);
                 }
             }
             else{
-                SerieUser serieutente = getSerieUser(ended, serie);
-                serieutente.addChapterSeen(season, chapter);
-                serieutente.setCurrentSeason(season.getNumber());
-                serieutente.setNextChapter(serieutente.findChapter(serieutente.getUserChapters(), season.getNumber(), chapter.getNumber()));
+                SerieUser serie = getSerieUser(ended, s);
+                serie.addChapterSeen(season, chapter);
+                ChapterSeen c = serie.findChapter(serie.getUserChapters(), season, chapter);
+                int num_chapters = serie.getSerie().getSeason(season).getChapters().size();
+                serie.setNextSeason(c, num_chapters);
                 this.addCharge(serie, season, chapter);
             }
         }
-    }
-
-    public Chapter viewLastChapter(SerieUser serie){
-        ChapterSeen chapter = serie.getNextChapter();
-        return serie.getSerie().getSeason(chapter.getNumSeason()).getChapter(chapter.getNumChapter());
     }
 
     public SerieUser viewSerieUser(ArrayList<SerieUser> userList, String nameSerie){
@@ -232,7 +230,7 @@ public class User {
             if(serieUtente.getSerie().getName().equals(nameSerie))
                 return serieUtente;
         }
-        return null; //Sistemare!!
+        return null;
     }
 
     @Override
@@ -250,4 +248,5 @@ public class User {
     public int hashCode() {
         return Objects.hash(email);
     }
+
 }

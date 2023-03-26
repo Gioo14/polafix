@@ -9,11 +9,10 @@ public class SerieUser {
     private Serie serie;
     private int currentSeason;
     private ArrayList<ChapterSeen> userChapters;
-    private ChapterSeen nextChapter;
 
-    public SerieUser(Serie serie, int currentSeason) {
+    public SerieUser(Serie serie) {
         this.serie = serie;
-        this.currentSeason = currentSeason;
+        this.currentSeason = 1;
         this.userChapters = new ArrayList<ChapterSeen>();
 
         ArrayList<Season> seasons = this.serie.getSeasons();
@@ -25,8 +24,6 @@ public class SerieUser {
                 userChapters.add(c);
             }
         }
-
-        this.nextChapter = userChapters.get(0);
     }
 
     public Serie getSerie() {
@@ -37,32 +34,26 @@ public class SerieUser {
         return currentSeason;
     }
 
-    public void setCurrentSeason(int currentSeason) {
-        this.currentSeason = currentSeason;
-    }
-
-    public ChapterSeen getNextChapter() {
-        return nextChapter;
-    }
-
-    public void setNextChapter(ChapterSeen currentChapter) {
-        ArrayList<ChapterSeen> chapters = this.getUserChapters();
-        ChapterSeen nextChapter = findChapter(chapters, currentSeason, (currentChapter.getNumChapter()+1));
-        if(nextChapter!=null && !isLastChapter(nextChapter))
-            this.nextChapter=nextChapter;
-        else {
-            if(nextChapter!=null && isLastChapter(nextChapter))
-                this.nextChapter = findChapter(chapters, 1, 1);
-            else
-                this.nextChapter=findChapter(chapters, currentSeason+1, 1);     
-        }
-    }
-
     public ArrayList<ChapterSeen> getUserChapters() {
         return userChapters;
     }
 
-    private boolean isLastChapter(ChapterSeen chapter){
+    public void setCurrentSeason(int currentSeason) {
+        this.currentSeason = currentSeason;
+    }
+
+    public void setNextSeason(ChapterSeen currentChapter, int num_chapters) {
+        if(currentChapter.getNumChapter()==num_chapters && !isLastChapter(currentChapter))
+            this.currentSeason = currentChapter.getNumSeason()+1;
+        else {
+            if(isLastChapter(currentChapter))
+                this.currentSeason = 1;
+            else
+                this.currentSeason = currentChapter.getNumSeason();
+        }
+    }
+
+    public boolean isLastChapter(ChapterSeen chapter){
         if(this.getUserChapters().get(this.getUserChapters().size()-1).equals(chapter))
             return true;
         else
@@ -81,26 +72,11 @@ public class SerieUser {
         return cs;
     }
 
-    public void addChapterSeen(Season season, Chapter chapter){
+    public void addChapterSeen(int season, int chapter){
         ArrayList<ChapterSeen> chapters = this.getUserChapters();
-        ChapterSeen cs = findChapter(chapters, season.getNumber(), chapter.getNumber());
+        ChapterSeen cs = findChapter(chapters, season, chapter);
         cs.setState(ChapterState.SEEN);
     }
-
-   /*  public ChapterSeen getLastChapter(){
-        Chapter c = null;
-        int currentseason = this.getCurrentSeason();
-        ArrayList<ChapterSeen> userChapters = this.getUserChapters();
-        Season season = this.getSerie().getSeason(currentseason);
-        ArrayList<Chapter> chapters = season.getChapters();
-        for(int i=0; i<chapters.size(); i++){
-            if(userChapters.get(i).getState().equals(ChapterState.NOTSEEN)){
-                c = userChapters.get(i).getChapter();
-                return c;
-            }
-        }
-        return c;
-    }*/
 
     @Override
     public boolean equals(Object o) {
@@ -110,11 +86,11 @@ public class SerieUser {
             return false;
         }
         SerieUser serieUtente = (SerieUser) o;
-        return Objects.equals(serie, serieUtente.serie) && currentSeason == serieUtente.currentSeason && Objects.equals(userChapters, serieUtente.userChapters);
+        return Objects.equals(serie, serieUtente.serie);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(serie, currentSeason, userChapters);
+        return Objects.hash(serie);
     }
 }
