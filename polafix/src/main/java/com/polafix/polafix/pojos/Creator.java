@@ -3,11 +3,14 @@ package com.polafix.polafix.pojos;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Creator {
-    public String creatorId;
-    public String name;
-    public String surname;
-    public ArrayList<Serie> series;
+    private String creatorId;
+    private String name;
+    private String surname;
+    private ArrayList<Serie> series;
 
     public Creator(String creatorId, String name, String surname, ArrayList<Serie> series) {
         this.creatorId = creatorId;

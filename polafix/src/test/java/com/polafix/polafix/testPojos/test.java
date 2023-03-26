@@ -16,7 +16,7 @@ import com.polafix.polafix.pojos.Charge;
 import com.polafix.polafix.pojos.Season;
 import com.polafix.polafix.pojos.Serie;
 import com.polafix.polafix.pojos.SerieUser;
-import com.polafix.polafix.pojos.Subscripton;
+import com.polafix.polafix.pojos.Subscription;
 import com.polafix.polafix.pojos.Type;
 import com.polafix.polafix.pojos.User;
 
@@ -25,7 +25,7 @@ public class test {
     private ArrayList<Serie> series = new ArrayList<Serie>();
 
     private String email = "anna.bianchi@gmail.com";
-    private Subscripton type = Subscripton.NOTSUBSCRIBED;
+    private Subscription type = Subscription.NOTSUBSCRIBED;
     private String name ="ANNA";
     private String surname = "BIANCHI";
     private String IBAN = "xxxxxxxxxxxxx";
@@ -34,7 +34,7 @@ public class test {
     private String idSerie = "@seriexx";
     private String serieName = "Lost";
     private Type typeSerie = Type.SILVER;
-    private String description = "....";
+    private String description = ".........";
 
     public void setSerie(Serie lost, Season lost1, ArrayList<Chapter> chapters){
         for(int i=0; i<chapters.size(); i++){
@@ -91,7 +91,7 @@ public class test {
 
         assertEquals(true, addUser(utente));
         assertEquals("anna.bianchi@gmail.com" ,utente.getEmail());
-        assertEquals(Subscripton.NOTSUBSCRIBED, utente.getType());
+        assertEquals(Subscription.NOTSUBSCRIBED, utente.getType());
 
         assertEquals(0, utente.getInlist().size());
         assertEquals(0, utente.getEnded().size());
@@ -151,26 +151,29 @@ public class test {
         //User add a serie in his lists of series
         utente.addSerie(lost);
         SerieUser serieUtente = new SerieUser(lost, 1);
+        //serieUtente.addChapterSeen(lost1, lost1_1);
         assertEquals(1, utente.getInlist().size());
         assertEquals(serieUtente, utente.getInlist().get(0));
 
         //User select a chapter: the chapter state change and the chapter is added at the balance
         utente.selectChapter(lost, lost1, lost1_1);
-        serieUtente.addChapterSeen(lost1_1);
-        Charge expected = new Charge(LocalDate.now(), lost.getName(), 1, 1, lost.getType().getprice());
         assertEquals(1, utente.getStarted().size());
+        Charge expected = new Charge(LocalDate.now(), lost.getName(), 1, 1, lost.getType().getprice());
         assertEquals(1, utente.getLastBalance().getAllCharges().size());
         assertEquals(expected, utente.getLastBalance().getAllCharges().get(0));
         assertEquals(serieUtente, utente.getStarted().get(0));
+        assertEquals(1, serieUtente.getNextChapter().getNumSeason());
+        assertEquals(2, serieUtente.getNextChapter().getNumChapter());
         assertEquals(serieUtente, utente.viewSerieUser(utente.getStarted(), "Lost"));
         
         //User visualize the serie from the list
         Chapter c = utente.viewLastChapter(serieUtente);
+        System.out.print(c.getTitle());
         assertEquals(lost1_2, c);
 
         //View last chapter -> verify ended
         utente.selectChapter(lost, lost1, lost1_3);
-        serieUtente.addChapterSeen(lost1_3);
+        serieUtente.addChapterSeen(lost1, lost1_3);
         expected = new Charge(LocalDate.now(), lost.getName(), 1, 3, lost.getType().getprice());
         assertEquals(1, utente.getEnded().size());
         assertEquals(serieUtente, utente.getEnded().get(0));

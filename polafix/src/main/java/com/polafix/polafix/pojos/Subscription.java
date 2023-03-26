@@ -1,6 +1,6 @@
 package com.polafix.polafix.pojos;
 
-public enum Subscripton {
+public enum Subscription {
 
     SUBSCRIBED,
     NOTSUBSCRIBED;

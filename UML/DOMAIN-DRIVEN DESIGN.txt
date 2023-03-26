@@ -4,6 +4,7 @@ Clasificacion de los elementos del modelo anterior como Entities, Value Objects 
 
 User -> entity
 La clase User es una entidad en la que se definen todos los atributos y las operaciones del usuario suscrito a Polafix. Cada usuario es único y y está definido por un conjunto de atributos, ademas, tiene una identidad en la aplicación, de hecho, cada usuario tiene un Id único que lo distingue y con el que instanciamos objetos de usuario.
+//
 
 Balance -> entity
 Balance representa una entidad porque cada usuario ni tiene un único y el balance debe ser monitoreado durante la ejecución de la aplicación. En el balance, de hecho, el atributo saldo debe ser monitoreado
@@ -33,7 +34,7 @@ Type -> value object
 Es un value object enumerativo que define el tipo de serie y el precio asociado. 
 
 ChapterState -> value object
-Es un value object para el Chapter para determinar si el episodio fue visto o no.
+Es un value object para el Chapter para determinar si el episodio fue visto o no.//ENUMERATIVO
 
 ManagePaiment -> Service
 ManagePaiment es un servicio porque es la clase con la que el sistema va a gestionar los pagos del usuario al final del mes. Como servicio no es ni un método de Usuario ni de Balance ya que es el sistema quien lo gestiona. Lo que hace es acceder al Balance y al IBAN de un usuario determinado a partir del ID y realizar el pago borrando el saldo del usuario. 

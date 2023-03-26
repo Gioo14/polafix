@@ -3,8 +3,14 @@ package com.polafix.polafix.pojos;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Objects;
+import javax.persistence.*;
 
+@Entity
 public class Balance {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private float amount;
     private Month month;
     private int year;

@@ -3,14 +3,19 @@ package com.polafix.polafix.pojos;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import javax.persistence.*;
+
+@Entity
 public class Serie {
-    public String idSerie;
-    public String name;
-    public Type type;
-    public String shortDescription;
-    public ArrayList<Season> seasons;
-    public ArrayList<Actor> actors;
-    public ArrayList<Creator> creators;
+    
+    @Id
+    private String idSerie;
+    private String name;
+    private Type type;
+    private String shortDescription;
+    private ArrayList<Season> seasons;
+    private ArrayList<Actor> actors;
+    private ArrayList<Creator> creators;
 
     public Serie(String idSerie, String name, Type type, String shortDescription) {
         setName(name);

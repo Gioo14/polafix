@@ -5,9 +5,9 @@ import java.util.Objects;
 
 public class Actor {
 
-    public String actorId;
-    public String name;
-    public String surname;
+    private String actorId;
+    private String name;
+    private String surname;
 
     public ArrayList<Serie> series;
 

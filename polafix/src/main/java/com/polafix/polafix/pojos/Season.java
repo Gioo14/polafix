@@ -2,11 +2,13 @@ package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import javax.persistence.*;
 
+@Entity
 public class Season {
-    public String title;
-    public int number;
-    public ArrayList<Chapter> chapters;
+    private String title;
+    private int number;
+    private ArrayList<Chapter> chapters;
 
     public Season(String title, int number) {
         setTitle(title);

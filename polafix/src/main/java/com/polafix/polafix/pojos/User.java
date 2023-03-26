@@ -5,13 +5,16 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.*;
 
+@Entity
 public class User {
 
+    @Id
     private String email;
     private String name;
     private String surname;
-    private Subscripton type;
+    private Subscription type;
     private Date dateOfBirth;
     private String IBAN;
     private String password;
@@ -21,7 +24,7 @@ public class User {
     private ArrayList<SerieUser> inlist;
     private ArrayList<Balance> balances;
     
-    public User(String email, Subscripton type, String IBAN, String name, String surname, Date dateOfBirth){
+    public User(String email, Subscription type, String IBAN, String name, String surname, Date dateOfBirth){
         this.name=name;
         this.surname=surname;
         this.email=email;
@@ -75,11 +78,11 @@ public class User {
         this.password=password;
     }
 
-    public Subscripton getType() {
+    public Subscription getType() {
         return this.type;
     }
 
-    public void setType(Subscripton type) {
+    public void setType(Subscription type) {
         this.type = type;
     }
 
@@ -135,7 +138,7 @@ public class User {
         Month month = date.getMonth();
         int year = date.getYear();
         Balance lastBalance = getLastBalance();
-        Charge charge = new Charge(date, serie.getName(), season.getNumber(), chapter.getNumber(), serie.type.getprice());
+        Charge charge = new Charge(date, serie.getName(), season.getNumber(), chapter.getNumber(), serie.getType().getprice());
         if(lastBalance.getMonth().equals(month) && year==lastBalance.getYear()){
             lastBalance.addCharge(charge);
         }else{
@@ -182,8 +185,9 @@ public class User {
         addSerie(serie);
         if(isInList(serie, inlist)){
             SerieUser serieutente = getSerieUser(inlist, serie);
-            serieutente.addChapterSeen(chapter);
+            serieutente.addChapterSeen(season, chapter);
             serieutente.setCurrentSeason(season.getNumber());
+            serieutente.setNextChapter(serieutente.findChapter(serieutente.getUserChapters(), season.getNumber(), chapter.getNumber()));
             this.addCharge(serie, season, chapter);
             if(isLastChapter(serie, season, chapter)){
                 ended.add(serieutente);
@@ -198,8 +202,9 @@ public class User {
         else{
             if(isInList(serie, started)){
                 SerieUser serieutente = getSerieUser(started, serie);
-                serieutente.addChapterSeen(chapter);
+                serieutente.addChapterSeen(season, chapter);
                 serieutente.setCurrentSeason(season.getNumber());
+                serieutente.setNextChapter(serieutente.findChapter(serieutente.getUserChapters(), season.getNumber(), chapter.getNumber()));
                 this.addCharge(serie, season, chapter);
                 if(isLastChapter(serie, season, chapter)){
                     ended.add(serieutente);
@@ -209,19 +214,17 @@ public class User {
             }
             else{
                 SerieUser serieutente = getSerieUser(ended, serie);
-                serieutente.addChapterSeen(chapter);
+                serieutente.addChapterSeen(season, chapter);
                 serieutente.setCurrentSeason(season.getNumber());
+                serieutente.setNextChapter(serieutente.findChapter(serieutente.getUserChapters(), season.getNumber(), chapter.getNumber()));
                 this.addCharge(serie, season, chapter);
             }
         }
     }
 
     public Chapter viewLastChapter(SerieUser serie){
-        Chapter chapter = serie.getLastChapter();
-        if(chapter==null){
-            return serie.getSerie().getSeason(1).getChapter(1);
-        }else
-            return chapter;
+        ChapterSeen chapter = serie.getNextChapter();
+        return serie.getSerie().getSeason(chapter.getNumSeason()).getChapter(chapter.getNumChapter());
     }
 
     public SerieUser viewSerieUser(ArrayList<SerieUser> userList, String nameSerie){
@@ -245,6 +248,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, name, surname, type, dateOfBirth, IBAN, password, ended, started, inlist, balances);
+        return Objects.hash(email);
     }
 }

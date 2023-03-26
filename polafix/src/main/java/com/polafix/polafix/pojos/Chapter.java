@@ -1,11 +1,13 @@
 package com.polafix.polafix.pojos;
 
 import java.util.Objects;
+import javax.persistence.*;
 
+@Entity
 public class Chapter {
-    public int number;
-    public String title;
-    public String description;
+    private int number;
+    private String title;
+    private String description;
 
     public Chapter(int number, String title, String description) {
         setNumber(number);

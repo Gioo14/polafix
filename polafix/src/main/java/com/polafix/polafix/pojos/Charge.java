@@ -2,13 +2,15 @@ package com.polafix.polafix.pojos;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import javax.persistence.*;
 
+@Embeddable
 public class Charge {
-    public LocalDate date;
-    public String name;
-    public int season;
-    public int number;
-    public float price;
+    private LocalDate date;
+    private String name;
+    private int season;
+    private int number;
+    private float price;
 
     public Charge(LocalDate date, String name, int season, int number, float price) {
         this.date = date;
