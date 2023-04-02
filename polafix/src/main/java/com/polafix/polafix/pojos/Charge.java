@@ -4,8 +4,13 @@ import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.*;
 
-@Embeddable
+@Entity
 public class Charge {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     private LocalDate date;
     private String name;
     private int season;

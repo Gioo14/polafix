@@ -18,10 +18,13 @@ public class User {
     private Date dateOfBirth;
     private String IBAN;
     private String password;
-
+    @OneToMany
     private ArrayList<SerieUser> ended;
+    @OneToMany
     private ArrayList<SerieUser> started;
+    @OneToMany
     private ArrayList<SerieUser> inlist;
+    @OneToMany
     private ArrayList<Balance> balances;
     
     public User(String email, Subscription type, String IBAN, String name, String surname, Date dateOfBirth){

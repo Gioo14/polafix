@@ -9,11 +9,13 @@ import javax.persistence.*;
 public class Balance {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private float amount;
     private Month month;
     private int year;
+    @OneToMany
     private ArrayList<Charge> charges;
 
     public Balance(float amount, Month month, int year) {

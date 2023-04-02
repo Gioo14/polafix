@@ -5,7 +5,10 @@ import javax.persistence.*;
 
 @Entity
 public class Chapter {
+
+    @Id
     private int number;
+    @Id
     private String title;
     private String description;
 

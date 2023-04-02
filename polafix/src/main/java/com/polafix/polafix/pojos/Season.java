@@ -6,8 +6,12 @@ import javax.persistence.*;
 
 @Entity
 public class Season {
-    private String title;
+
+    @Id
     private int number;
+    @Id
+    private String title;
+    @OneToMany
     private ArrayList<Chapter> chapters;
 
     public Season(String title, int number) {

@@ -13,8 +13,11 @@ public class Serie {
     private String name;
     private Type type;
     private String shortDescription;
+    @OneToMany
     private ArrayList<Season> seasons;
+    @ManyToMany
     private ArrayList<Actor> actors;
+    @ManyToMany
     private ArrayList<Creator> creators;
 
     public Serie(String idSerie, String name, Type type, String shortDescription) {

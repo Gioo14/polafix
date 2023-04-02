@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 @Embeddable
 public class ChapterSeen {
+    
     private int numChapter;
     private int numSeason;
     private ChapterState state;

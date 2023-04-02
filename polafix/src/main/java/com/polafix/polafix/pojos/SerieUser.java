@@ -6,8 +6,14 @@ import javax.persistence.*;
 
 @Entity
 public class SerieUser {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Serie serie;
     private int currentSeason;
+    @OneToMany
     private ArrayList<ChapterSeen> userChapters;
 
     public SerieUser(Serie serie) {

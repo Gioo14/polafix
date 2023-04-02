@@ -3,12 +3,18 @@ package com.polafix.polafix.pojos;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
 public class Creator {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     private String name;
     private String surname;
+    @ManyToMany(mappedBy = "creators")
     private ArrayList<Serie> series;
 
     public Creator(String name, String surname, ArrayList<Serie> series) {
