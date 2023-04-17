@@ -4,14 +4,11 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
-@Table(name="chapters")
 public class Chapter {
 
     @Id
     private int number;
-    @Id
     private String title;
-    @Column(name="description")
     private String description;
 
     public Chapter(int number, String title, String description) {

@@ -1,6 +1,7 @@
 package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
@@ -12,22 +13,21 @@ public class SerieUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="serie")
+    @OneToOne
     private Serie serie;
-    @Column(name="currentSeason")
     private int currentSeason;
-    @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<ChapterSeen> userChapters;
+    @ElementCollection
+    private List<ChapterSeen> userChapters;
 
     public SerieUser(Serie serie) {
         this.serie = serie;
         this.currentSeason = 1;
         this.userChapters = new ArrayList<ChapterSeen>();
 
-        ArrayList<Season> seasons = this.serie.getSeasons();
+        List<Season> seasons = this.serie.getSeasons();
         for(int i=0; i<seasons.size(); i++){
             Season season = seasons.get(i);
-            ArrayList<Chapter> chapters = season.getChapters();
+            List<Chapter> chapters = season.getChapters();
             for(int j=0; j<chapters.size(); j++){
                 ChapterSeen c = new ChapterSeen(season.getNumber(), chapters.get(j).getNumber(), ChapterState.NOTSEEN);
                 userChapters.add(c);
@@ -43,7 +43,7 @@ public class SerieUser {
         return currentSeason;
     }
 
-    public ArrayList<ChapterSeen> getUserChapters() {
+    public List<ChapterSeen> getUserChapters() {
         return userChapters;
     }
 
@@ -69,7 +69,7 @@ public class SerieUser {
             return false;
     }
 
-    public ChapterSeen findChapter(ArrayList<ChapterSeen> chapters, int numSeason, int numChapter){
+    public ChapterSeen findChapter(List<ChapterSeen> chapters, int numSeason, int numChapter){
         ChapterSeen cs = null;
         for(int i=0; i<chapters.size(); i++){
             cs = chapters.get(i);
@@ -82,7 +82,7 @@ public class SerieUser {
     }
 
     public void addChapterSeen(int season, int chapter){
-        ArrayList<ChapterSeen> chapters = this.getUserChapters();
+        List<ChapterSeen> chapters = this.getUserChapters();
         ChapterSeen cs = findChapter(chapters, season, chapter);
         cs.setState(ChapterState.SEEN);
     }

@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.polafix.polafix.pojos.Balance;
 import com.polafix.polafix.pojos.Chapter;
@@ -21,8 +22,8 @@ import com.polafix.polafix.pojos.Type;
 import com.polafix.polafix.pojos.User;
 
 public class test {
-    private ArrayList<User> users = new ArrayList<User>();
-    private ArrayList<Serie> series = new ArrayList<Serie>();
+    private List<User> users = new ArrayList<User>();
+    private List<Serie> series = new ArrayList<Serie>();
 
     private String email = "anna.bianchi@gmail.com";
     private Subscription type = Subscription.NOTSUBSCRIBED;
@@ -36,7 +37,7 @@ public class test {
     private Type typeSerie = Type.SILVER;
     private String description = ".........";
 
-    public void setSerie(Serie lost, Season lost1, ArrayList<Chapter> chapters){
+    public void setSerie(Serie lost, Season lost1, List<Chapter> chapters){
         for(int i=0; i<chapters.size(); i++){
             lost1.addChapter(chapters.get(i));
         }
@@ -106,7 +107,7 @@ public class test {
         Chapter lost1_1 = new Chapter(1, "lost1_1", description);
         Chapter lost1_2 = new Chapter(2, "lost1_2", description);
         Chapter lost1_3 = new Chapter(3, "lost1_3", description);
-        ArrayList<Chapter> chapters = new ArrayList<Chapter>();
+        List<Chapter> chapters = new ArrayList<Chapter>();
         chapters.add(lost1_1);
         chapters.add(lost1_2);
         chapters.add(lost1_3);
@@ -142,7 +143,7 @@ public class test {
         Chapter lost1_1 = new Chapter(1, "lost1_1", description);
         Chapter lost1_2 = new Chapter(2, "lost1_2", description);
         Chapter lost1_3 = new Chapter(3, "lost1_3", description);
-        ArrayList<Chapter> chapters = new ArrayList<Chapter>();
+        List<Chapter> chapters = new ArrayList<Chapter>();
         chapters.add(lost1_1);
         chapters.add(lost1_2);
         chapters.add(lost1_3);

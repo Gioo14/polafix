@@ -4,35 +4,29 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
 public class User {
 
     @Id
     private String email;
-    @Column(name = "name")
     private String name;
-    @Column(name = "surname")
     private String surname;
-    @Column(name = "type")
     private Subscription type;
-    @Column(name = "dateOfBirth")
     private Date dateOfBirth;
-    @Column(name = "IBAN")
     private String IBAN;
-    @Column(name = "password")
     private String password;
+    @OneToMany
+    private List<SerieUser> ended;
+    @OneToMany
+    private List<SerieUser> started;
+    @OneToMany
+    private List<SerieUser> inlist;
     @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<SerieUser> ended;
-    @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<SerieUser> started;
-    @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<SerieUser> inlist;
-    @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<Balance> balances;
+    private List<Balance> balances;
     
     public User(String email, Subscription type, String IBAN, String name, String surname, Date dateOfBirth){
         this.name=name;
@@ -104,19 +98,19 @@ public class User {
         this.IBAN = IBAN;
     }
 
-    public ArrayList<SerieUser> getEnded() {
+    public List<SerieUser> getEnded() {
         return ended;
     }
 
-    public ArrayList<SerieUser> getStarted() {
+    public List<SerieUser> getStarted() {
         return started;
     }
 
-    public ArrayList<SerieUser> getInlist() {
+    public List<SerieUser> getInlist() {
         return inlist;
     }
 
-    public ArrayList<Balance> getBalances() {
+    public List<Balance> getBalances() {
         return this.balances;
     }
 
@@ -128,7 +122,7 @@ public class User {
     }
 
     public Balance getHistoryBalance(Month month, int year){
-        ArrayList<Balance> balances = this.getBalances();
+        List<Balance> balances = this.getBalances();
         for (Balance balance : balances) {
             Month mese = balance.getMonth();
             int anno = balance.getYear();
@@ -157,7 +151,7 @@ public class User {
         }
     } 
     
-    private boolean isInListUser(SerieUser serie, ArrayList<SerieUser> lista){
+    private boolean isInListUser(SerieUser serie, List<SerieUser> lista){
         for(SerieUser s : lista){
             if(s.getSerie().getName().equals(serie.getSerie().getName())){
                 return true;
@@ -166,7 +160,7 @@ public class User {
         return false;
     }
 
-    private boolean isInList(Serie serie, ArrayList<SerieUser> lista){
+    private boolean isInList(Serie serie, List<SerieUser> lista){
         for(SerieUser s : lista){
             if(s.getSerie().getName().equals(serie.getName())){
                 return true;
@@ -186,7 +180,7 @@ public class User {
         return serie.isLastChapter(chapter);
     }
 
-    private SerieUser getSerieUser(ArrayList<SerieUser> lista, SerieUser serie){
+    private SerieUser getSerieUser(List<SerieUser> lista, SerieUser serie){
         for (SerieUser serieUser : lista) {
             if(serieUser.getSerie().equals(serie.getSerie()))
                 return serieUser;
@@ -235,7 +229,7 @@ public class User {
         }
     }
 
-    public SerieUser viewSerieUser(ArrayList<SerieUser> userList, String nameSerie){
+    public SerieUser viewSerieUser(List<SerieUser> userList, String nameSerie){
         for (SerieUser serieUtente : userList) {
             if(serieUtente.getSerie().getName().equals(nameSerie))
                 return serieUtente;

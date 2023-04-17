@@ -1,26 +1,24 @@
 package com.polafix.polafix.pojos;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name="actors")
 public class Actor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @Column(name = "name")
     private String name;
-    @Column(name = "surname")
     private String surname;
-    @ManyToMany(mappedBy = "actors", cascade = CascadeType.ALL)
-    public ArrayList<Serie> series;
+    @ManyToMany(mappedBy = "actors")
+    private List<Serie> series;
 
-    public Actor(String name, String surname, ArrayList<Serie> series) {
+    public Actor(String name, String surname, List<Serie> series) {
         this.name = name;
         this.surname = surname;
         setSeries(series);
@@ -34,11 +32,11 @@ public class Actor {
         return surname;
     }
 
-    public ArrayList<Serie> getSeries() {
+    public List<Serie> getSeries() {
         return series;
     }
 
-    public void setSeries(ArrayList<Serie> series) {
+    public void setSeries(List<Serie> series) {
         this.series = new ArrayList<Serie>(series);
     }
     

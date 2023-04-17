@@ -2,25 +2,22 @@ package com.polafix.polafix.pojos;
 
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
-@Table(name="balances")
 public class Balance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name="amount")
     private float amount;
-    @Column(name="month")
     private Month month;
-    @Column(name="year")
     private int year;
     @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<Charge> charges;
+    private List<Charge> charges;
 
     public Balance(float amount, Month month, int year) {
         this.month = month;
@@ -53,7 +50,7 @@ public class Balance {
         this.year = year;
     }
 
-    public ArrayList<Charge> getAllCharges() {
+    public List<Charge> getAllCharges() {
         return charges;
     }
 

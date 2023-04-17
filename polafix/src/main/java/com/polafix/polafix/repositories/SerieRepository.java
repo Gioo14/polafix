@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.polafix.polafix.pojos.*;
 
 @Repository
-public interface SerieRepository extends JpaRepository<Serie, Long> {
-    Serie findByTitle(String title);
+public interface SerieRepository extends JpaRepository<Serie, String> {
+    Serie findByName(String name);
 }

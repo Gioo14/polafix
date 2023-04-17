@@ -5,22 +5,16 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
-@Table(name="charges")
 public class Charge {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name="date")
     private LocalDate date;
-    @Column(name="name")
     private String name;
-    @Column(name="season")
     private int season;
-    @Column(name="number")
     private int number;
-    @Column(name="price")
     private float price;
 
     public Charge(LocalDate date, String name, int season, int number, float price) {
