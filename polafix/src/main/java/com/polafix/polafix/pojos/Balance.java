@@ -6,16 +6,20 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
+@Table(name="balances")
 public class Balance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name="amount")
     private float amount;
+    @Column(name="month")
     private Month month;
+    @Column(name="year")
     private int year;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private ArrayList<Charge> charges;
 
     public Balance(float amount, Month month, int year) {

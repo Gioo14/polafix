@@ -6,15 +6,18 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
+@Table(name="creators")
 public class Creator {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name="name")
     private String name;
+    @Column(name="surname")
     private String surname;
-    @ManyToMany(mappedBy = "creators")
+    @ManyToMany(mappedBy = "creators", cascade = CascadeType.ALL)
     private ArrayList<Serie> series;
 
     public Creator(String name, String surname, ArrayList<Serie> series) {

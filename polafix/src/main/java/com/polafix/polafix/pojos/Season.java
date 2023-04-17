@@ -5,13 +5,14 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
+@Table(name="seasons")
 public class Season {
 
     @Id
     private int number;
     @Id
     private String title;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private ArrayList<Chapter> chapters;
 
     public Season(String title, int number) {

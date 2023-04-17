@@ -5,15 +5,18 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
+@Table(name="seriesuser")
 public class SerieUser {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="serie")
     private Serie serie;
+    @Column(name="currentSeason")
     private int currentSeason;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private ArrayList<ChapterSeen> userChapters;
 
     public SerieUser(Serie serie) {

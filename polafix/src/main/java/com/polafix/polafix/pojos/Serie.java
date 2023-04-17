@@ -6,18 +6,22 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
+@Table(name="series")
 public class Serie {
     
     @Id
     private String idSerie;
+    @Column(name="name")
     private String name;
+    @Column(name="type")
     private Type type;
+    @Column(name="shortDescription")
     private String shortDescription;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private ArrayList<Season> seasons;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private ArrayList<Actor> actors;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private ArrayList<Creator> creators;
 
     public Serie(String idSerie, String name, Type type, String shortDescription) {
