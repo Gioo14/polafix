@@ -19,14 +19,16 @@ public class User {
     private Date dateOfBirth;
     private String IBAN;
     private String password;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<SerieUser> ended;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<SerieUser> started;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<SerieUser> inlist;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Balance> balances;
+
+    public User() {}
     
     public User(String email, Subscription type, String IBAN, String name, String surname, Date dateOfBirth){
         this.name=name;

@@ -18,6 +18,8 @@ public class Actor {
     @ManyToMany(mappedBy = "actors")
     private List<Serie> series;
 
+    public Actor() {}
+
     public Actor(String name, String surname, List<Serie> series) {
         this.name = name;
         this.surname = surname;

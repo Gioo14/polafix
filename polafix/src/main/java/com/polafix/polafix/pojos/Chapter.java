@@ -7,9 +7,13 @@ import javax.persistence.*;
 public class Chapter {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private int number;
     private String title;
     private String description;
+
+    public Chapter() {}
 
     public Chapter(int number, String title, String description) {
         setNumber(number);

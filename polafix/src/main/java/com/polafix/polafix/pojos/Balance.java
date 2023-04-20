@@ -19,6 +19,8 @@ public class Balance {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Charge> charges;
 
+    public Balance() {}
+
     public Balance(float amount, Month month, int year) {
         this.month = month;
         this.year = year;

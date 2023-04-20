@@ -9,10 +9,14 @@ import javax.persistence.*;
 public class Season {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private int number;
     private String title;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Chapter> chapters;
+
+    public Season() {}
 
     public Season(String title, int number) {
         setTitle(title);

@@ -17,6 +17,8 @@ public class Charge {
     private int number;
     private float price;
 
+    public Charge() {}
+
     public Charge(LocalDate date, String name, int season, int number, float price) {
         this.date = date;
         this.name = name;

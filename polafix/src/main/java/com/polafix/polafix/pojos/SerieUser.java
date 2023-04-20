@@ -6,7 +6,6 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
-@Table(name="seriesuser")
 public class SerieUser {
     
     @Id
@@ -18,6 +17,8 @@ public class SerieUser {
     private int currentSeason;
     @ElementCollection
     private List<ChapterSeen> userChapters;
+
+    public SerieUser() {}
 
     public SerieUser(Serie serie) {
         this.serie = serie;

@@ -10,7 +10,8 @@ import javax.persistence.*;
 public class Serie {
     
     @Id
-    private String idSerie;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     private Type type;
     private String shortDescription;
@@ -21,7 +22,9 @@ public class Serie {
     @ManyToMany
     private List<Creator> creators;
 
-    public Serie(String idSerie, String name, Type type, String shortDescription) {
+    public Serie() {}
+
+    public Serie(String name, Type type, String shortDescription) {
         setName(name);
         setType(type);
         setDescription(shortDescription);
@@ -66,12 +69,8 @@ public class Serie {
         this.shortDescription = shortDescription;
     }
 
-    public String getIdSerie() {
-        return this.idSerie;
-    }
-
-    public void setIdSerie(String idSerie) {
-        this.idSerie = idSerie;
+    public Long getIdSerie() {
+        return this.id;
     }
 
     public void addActor(Actor actor) {
@@ -140,11 +139,11 @@ public class Serie {
             return false;
         }
         Serie serie = (Serie) o;
-        return Objects.equals(idSerie, serie.idSerie);
+        return Objects.equals(id, serie.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idSerie, name, type, shortDescription, seasons, actors, creators);
+        return Objects.hash(id, name, type, shortDescription, seasons, actors, creators);
     }
 }

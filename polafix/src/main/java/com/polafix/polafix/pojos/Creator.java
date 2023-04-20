@@ -18,6 +18,8 @@ public class Creator {
     @ManyToMany(mappedBy = "creators")
     private List<Serie> series;
 
+    public Creator() {}
+
     public Creator(String name, String surname, List<Serie> series) {
         this.name = name;
         this.surname = surname;
