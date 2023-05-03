@@ -5,15 +5,22 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class SerieUser {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private Long id;
-
     @OneToOne
+    @JsonProperty("serie")   
     private Serie serie;
+    @JsonProperty("title")
+    private String title;
+    @JsonProperty("currentSeason")
     private int currentSeason;
     @ElementCollection
     private List<ChapterSeen> userChapters;
@@ -24,6 +31,7 @@ public class SerieUser {
         this.serie = serie;
         this.currentSeason = 1;
         this.userChapters = new ArrayList<ChapterSeen>();
+        this.title = serie.getName();
 
         List<Season> seasons = this.serie.getSeasons();
         for(int i=0; i<seasons.size(); i++){
@@ -36,8 +44,37 @@ public class SerieUser {
         }
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Serie getSerie() {
         return serie;
+    }
+
+    public void setSerie(Serie serie) {
+        this.serie = serie;
+        this.currentSeason = 1;
+        this.userChapters = new ArrayList<ChapterSeen>();
+        this.title = serie.getName();
+
+        List<Season> seasons = this.serie.getSeasons();
+        for(int i=0; i<seasons.size(); i++){
+            Season season = seasons.get(i);
+            List<Chapter> chapters = season.getChapters();
+            for(int j=0; j<chapters.size(); j++){
+                ChapterSeen c = new ChapterSeen(season.getNumber(), chapters.get(j).getNumber(), ChapterState.NOTSEEN);
+                userChapters.add(c);
+            }
+        }
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public int getCurrentSeason() {

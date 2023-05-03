@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class Season {
 
@@ -14,6 +16,7 @@ public class Season {
     private int number;
     private String title;
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonProperty("chapters")
     private List<Chapter> chapters;
 
     public Season() {}

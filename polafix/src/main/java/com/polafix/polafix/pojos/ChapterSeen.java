@@ -3,12 +3,19 @@ package com.polafix.polafix.pojos;
 import java.util.Objects;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Embeddable
 public class ChapterSeen {
     
+    @JsonProperty("numChapter")
     private int numChapter;
+    @JsonProperty("numSeason")
     private int numSeason;
+    @JsonProperty("state")
     private ChapterState state;
+
+    public ChapterSeen(){}
     
     public ChapterSeen(int numSeason, int numChapter, ChapterState state) {
         this.numChapter = numChapter;

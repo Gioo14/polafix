@@ -115,7 +115,7 @@ public class AppFeeder implements CommandLineRunner{
         sr.save(rotten);
     }
 
-    private void testRepositoryUser(){
+    public void testRepositoryUser(){
 
         //-------------------USER REPOSITORY-----------------------------------------------------------------
 
@@ -125,24 +125,38 @@ public class AppFeeder implements CommandLineRunner{
         System.out.println(user.getName());
         System.out.println(user.getSurname());
         System.out.println(user.getType());
-        System.out.println("-------SERIE USER-----");
-        //System.out.println(user.getInlist().size());
-        //System.out.println(user.getEnded().size());
-        //System.out.println(user.getStarted().size());
-        System.out.println("-------BALANCES USER-----");
-        //System.out.println(user.getLastBalance().getAllCharges().size() + " = 1");
-        //System.out.println(user.getLastBalance().getAllCharges().get(0));
+        System.out.println("-------SERIE USER-------");
+        /*System.out.println(user.getInlist().size());
+        System.out.println(user.getEnded().size());
+        System.out.println(user.getStarted().size());
+
+        Serie rotten = sr.findByName("Rotten");
+        Serie lost = sr.findByName("Lost");
+        
+        user.addSerie(rotten);
+        user.addSerie(lost);
+        for (SerieUser s : user.getInlist())
+            System.out.println(s.getSerie().getName());
+        SerieUser serieUser = user.viewSerieUser(user.getInlist(), "Rotten");
+        user.selectChapter(serieUser, 1, 1);
+
+        System.out.println("-------BALANCES USER-------");
+        System.out.println(user.getLastBalance().getAllCharges().size() + " = 1");
+        System.out.println(user.getLastBalance().getAllCharges().get(0));
+        */
     }
 
     private void testRepositorySerie(){
-         //-------------------SEIRE REPOSITORY-----------------------------------------------------------------
+
+         //-----------------------------SEIRE REPOSITORY-------------------------------------------------------
         
          System.out.println("--------------------------TEST REPOSITORY SERIE-----------------------------------");
-         Serie rotten = sr.findByName("Rotten");
-         System.out.println(rotten.getName());
+         List<Serie> rotten = sr.findByName("Rotten");
+         System.out.println(rotten.get(0).getName());
          //Season s1 = rotten.getSeasons().get(0);
          //System.out.println(s1.getTitle());
          //Chapter c1 = s1.getChapter(1);
          //System.out.println(c1.getTitle());
     }
+
 }

@@ -8,24 +8,46 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
+import org.hibernate.annotations.Cascade;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class User {
 
     @Id
+    @JsonProperty("email")
     private String email;
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("surname")
     private String surname;
+    @JsonProperty("type")
     private Subscription type;
-    private Date dateOfBirth;
+    @JsonProperty("dateOfBirth")
+    private Date dateOfBirth; 
+    @JsonIgnore 
     private String IBAN;
+    @JsonIgnore
     private String password;
     @OneToMany(fetch = FetchType.EAGER)
+    @OrderColumn(name = "index")
+    @JsonProperty("ended")
     private List<SerieUser> ended;
     @OneToMany(fetch = FetchType.EAGER)
+    @OrderColumn(name = "index")
+    @JsonProperty("started")
     private List<SerieUser> started;
-    @OneToMany(fetch = FetchType.EAGER)
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OrderColumn(name = "index")
+    @JsonProperty("inlist")
     private List<SerieUser> inlist;
+
+    @OrderColumn(name = "index")
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Balance> balances;
 
     public User() {}
@@ -135,7 +157,7 @@ public class User {
         return null;
     }
 
-    public Balance getLastBalance(){
+    public Balance getLastBalance(List<Balance> balances){
         return balances.get(balances.size()-1);
     }
 
@@ -143,7 +165,7 @@ public class User {
         LocalDate date = LocalDate.now();
         Month month = date.getMonth();
         int year = date.getYear();
-        Balance lastBalance = getLastBalance();
+        Balance lastBalance = getLastBalance(this.balances);
         Charge charge = new Charge(date, serie.getSerie().getName(), season, chapter, serie.getSerie().getType().getprice());
         if(lastBalance.getMonth().equals(month) && year==lastBalance.getYear()){
             lastBalance.addCharge(charge);
@@ -153,7 +175,7 @@ public class User {
         }
     } 
     
-    private boolean isInListUser(SerieUser serie, List<SerieUser> lista){
+    public boolean isInListUser(SerieUser serie, List<SerieUser> lista){
         for(SerieUser s : lista){
             if(s.getSerie().getName().equals(serie.getSerie().getName())){
                 return true;
