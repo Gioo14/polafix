@@ -24,19 +24,9 @@ public class SerieController {
         return serieService.getSerieByName(name);
     }
 
-    @GetMapping("/{id}")
-    public Serie getSerieById(@PathVariable Long id) {
-        return serieService.getSerieById(id);
-    }
-
     @PostMapping("")
     public Serie createSerie(@RequestBody Serie serie) {
         return serieService.createSerie(serie);
-    }
-
-    @PutMapping("/{name}")
-    public Serie updateUser(@PathVariable String email, @RequestBody Serie serie) {
-        return null;
     }
 
     @DeleteMapping("/{name}")

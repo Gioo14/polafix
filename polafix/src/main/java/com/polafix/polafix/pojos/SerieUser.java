@@ -124,6 +124,15 @@ public class SerieUser {
         cs.setState(ChapterState.SEEN);
     }
 
+    public List<ChapterSeen> getChapterForSeason(int season){
+        List<ChapterSeen> lista = new ArrayList<>();
+        for(ChapterSeen cs : this.getUserChapters()){
+            if(cs.getNumSeason()==season)
+                lista.add(cs);
+        }
+        return lista;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)

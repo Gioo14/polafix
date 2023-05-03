@@ -47,16 +47,6 @@ public class SerieServiceImpl implements SerieService{
     }
 
     @Override
-    public Serie updateSerie(Long id, Serie serie) {
-       Serie existingSerie = serieRepository.findById(id).orElse(null);
-        if (existingSerie != null) {
-            return serieRepository.save(existingSerie);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
     public boolean deleteSerie(Long id) {
         boolean deleted = false;
         if (serieRepository.existsById(id)) {

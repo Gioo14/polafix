@@ -1,7 +1,6 @@
 package com.polafix.polafix.controller;
 
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,17 +57,13 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{email}/started/{id}/{season}")
-    public SerieUserResponse getSerieUserStarted(@PathVariable String email, @PathVariable Long id, @PathVariable int season) {
+    @GetMapping("/{email}/started/{id}")
+    public SerieUserResponse getSerieUserStarted(@PathVariable String email, @PathVariable Long id, @RequestParam int season) {
         User existingUser = userService.getUserById(email);
         if (existingUser != null) {
             for (SerieUser s : existingUser.getStarted()) {
                 if(s.getId()==(id)){
-                    List<ChapterSeen> lista = new ArrayList<>();
-                    for(ChapterSeen cs : s.getUserChapters()){
-                        if(cs.getNumSeason()==season)
-                            lista.add(cs);
-                    }
+                    List<ChapterSeen> lista = s.getChapterForSeason(season);
                     SerieUserResponse sur = new SerieUserResponse(s.getTitle(), s.getCurrentSeason(), s.getSerie().getType(), lista);
                     return sur;
                 }
@@ -81,23 +76,19 @@ public class UserController {
     public List<SerieUser> getUserEnded(@PathVariable String email) {
         User existingUser = userService.getUserById(email);
         if (existingUser != null) {
-            return existingUser.getStarted();
+            return existingUser.getEnded();
         } else {
             return null;
         }
     }
 
-    @GetMapping("/{email}/ended/{id}/{season}")
-    public SerieUserResponse getSerieUserEnded(@PathVariable String email, @PathVariable Long id, @PathVariable int season) {
+    @GetMapping("/{email}/ended/{id}")
+    public SerieUserResponse getSerieUserEnded(@PathVariable String email, @PathVariable Long id, @RequestParam int season) {
         User existingUser = userService.getUserById(email);
         if (existingUser != null) {
             for (SerieUser s : existingUser.getEnded()) {
                 if(s.getId()==id){
-                    List<ChapterSeen> lista = new ArrayList<>();
-                    for(ChapterSeen cs : s.getUserChapters()){
-                        if(cs.getNumSeason()==season)
-                            lista.add(cs);
-                    }
+                    List<ChapterSeen> lista = s.getChapterForSeason(season);
                     SerieUserResponse sur = new SerieUserResponse(s.getTitle(), s.getCurrentSeason(), s.getSerie().getType(), lista);
                     return sur;
                 }
@@ -116,17 +107,13 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{email}/inlist/{id}/{season}")
-    public SerieUserResponse getSerieUserInlist(@PathVariable String email, @PathVariable Long id, @PathVariable int season) {
+    @GetMapping("/{email}/inlist/{id}")
+    public SerieUserResponse getSerieUserInlist(@PathVariable String email, @PathVariable Long id, @RequestParam int season) {
         User existingUser = userService.getUserById(email);
         if (existingUser != null) {
             for (SerieUser s : existingUser.getInlist()) {
                 if(s.getId()==id){
-                    List<ChapterSeen> lista = new ArrayList<>();
-                    for(ChapterSeen cs : s.getUserChapters()){
-                        if(cs.getNumSeason()==season)
-                            lista.add(cs);
-                    }
+                    List<ChapterSeen> lista = s.getChapterForSeason(season);
                     SerieUserResponse sur = new SerieUserResponse(s.getTitle(), s.getCurrentSeason(), s.getSerie().getType(), lista);
                     return sur;
                 }

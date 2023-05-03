@@ -8,6 +8,5 @@ public interface SerieService {
     List<Serie> getSerieByName(String name);
     Serie getSerieById(Long id);
     Serie createSerie(Serie name);
-    Serie updateSerie(Long id, Serie serie);
     boolean deleteSerie(Long id);
 }
