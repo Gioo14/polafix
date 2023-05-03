@@ -24,8 +24,13 @@ public class SerieController {
         return serieService.getSerieByName(name);
     }
 
+    @GetMapping("/{id}")
+    public Serie getSerieById(@PathVariable Long id) {
+        return serieService.getSerieById(id);
+    }
+
     @PostMapping("")
-    public Serie createUser(@RequestBody Serie serie) {
+    public Serie createSerie(@RequestBody Serie serie) {
         return serieService.createSerie(serie);
     }
 

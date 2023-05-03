@@ -14,13 +14,19 @@ public class ChapterSeen {
     private int numSeason;
     @JsonProperty("state")
     private ChapterState state;
+    @JsonProperty("title")
+    private String title;
+    @JsonProperty("description")
+    private String description;
 
     public ChapterSeen(){}
     
-    public ChapterSeen(int numSeason, int numChapter, ChapterState state) {
+    public ChapterSeen(int numSeason, int numChapter, String title, String description, ChapterState state) {
         this.numChapter = numChapter;
         this.numSeason = numSeason;
         this.state = state;
+        this.title = title;
+        this.description = description;
     }
 
     public ChapterState getState() {
@@ -45,6 +51,22 @@ public class ChapterSeen {
 
     public void setNumSeason(int numSeason) {
         this.numSeason = numSeason;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

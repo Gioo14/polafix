@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
-import org.hibernate.annotations.Cascade;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,10 +23,10 @@ public class User {
     private String surname;
     @JsonProperty("type")
     private Subscription type;
-    @JsonProperty("dateOfBirth")
+    @JsonIgnore
     private Date dateOfBirth; 
     @JsonIgnore 
-    private String IBAN;
+    private String iban;
     @JsonIgnore
     private String password;
     @OneToMany(fetch = FetchType.EAGER)
@@ -57,7 +55,7 @@ public class User {
         this.surname=surname;
         this.email=email;
         this.type=type;
-        this.IBAN=IBAN;
+        this.iban=IBAN;
         this.dateOfBirth = dateOfBirth;
 
         setPassword(password);
@@ -115,11 +113,11 @@ public class User {
     }
 
     public String getIBAN() {
-        return IBAN;
+        return iban;
     }
 
     public void setIBAN(String IBAN) {
-        this.IBAN = IBAN;
+        this.iban = IBAN;
     }
 
     public List<SerieUser> getEnded() {

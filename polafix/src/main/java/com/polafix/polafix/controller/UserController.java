@@ -1,6 +1,7 @@
 package com.polafix.polafix.controller;
 
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,13 +58,20 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{email}/started/{title}")
-    public SerieUser getSerieUserStarted(@PathVariable String email, @PathVariable List<SerieUser> list, @PathVariable String title) {
+    @GetMapping("/{email}/started/{id}/{season}")
+    public SerieUserResponse getSerieUserStarted(@PathVariable String email, @PathVariable Long id, @PathVariable int season) {
         User existingUser = userService.getUserById(email);
         if (existingUser != null) {
             for (SerieUser s : existingUser.getStarted()) {
-                if(s.getTitle().equals(title))
-                    return s;
+                if(s.getId()==(id)){
+                    List<ChapterSeen> lista = new ArrayList<>();
+                    for(ChapterSeen cs : s.getUserChapters()){
+                        if(cs.getNumSeason()==season)
+                            lista.add(cs);
+                    }
+                    SerieUserResponse sur = new SerieUserResponse(s.getTitle(), s.getCurrentSeason(), s.getSerie().getType(), lista);
+                    return sur;
+                }
             }
         }
         return null;
@@ -79,13 +87,20 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{email}/ended/{title}")
-    public SerieUser getSerieUserEnded(@PathVariable String email, @PathVariable String title) {
+    @GetMapping("/{email}/ended/{id}/{season}")
+    public SerieUserResponse getSerieUserEnded(@PathVariable String email, @PathVariable Long id, @PathVariable int season) {
         User existingUser = userService.getUserById(email);
         if (existingUser != null) {
             for (SerieUser s : existingUser.getEnded()) {
-                if(s.getTitle().equals(title))
-                    return s;
+                if(s.getId()==id){
+                    List<ChapterSeen> lista = new ArrayList<>();
+                    for(ChapterSeen cs : s.getUserChapters()){
+                        if(cs.getNumSeason()==season)
+                            lista.add(cs);
+                    }
+                    SerieUserResponse sur = new SerieUserResponse(s.getTitle(), s.getCurrentSeason(), s.getSerie().getType(), lista);
+                    return sur;
+                }
             }
         }
         return null;
@@ -101,13 +116,20 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{email}/inlist/{title}")
-    public SerieUser getSerieUserInlist(@PathVariable String email, @PathVariable String title) {
+    @GetMapping("/{email}/inlist/{id}/{season}")
+    public SerieUserResponse getSerieUserInlist(@PathVariable String email, @PathVariable Long id, @PathVariable int season) {
         User existingUser = userService.getUserById(email);
         if (existingUser != null) {
             for (SerieUser s : existingUser.getInlist()) {
-                if(s.getTitle().equals(title))
-                    return s;
+                if(s.getId()==id){
+                    List<ChapterSeen> lista = new ArrayList<>();
+                    for(ChapterSeen cs : s.getUserChapters()){
+                        if(cs.getNumSeason()==season)
+                            lista.add(cs);
+                    }
+                    SerieUserResponse sur = new SerieUserResponse(s.getTitle(), s.getCurrentSeason(), s.getSerie().getType(), lista);
+                    return sur;
+                }
             }
         }
         return null;
@@ -136,17 +158,60 @@ public class UserController {
 
 //----------------------------------------------AGREGAR SERIE----------------------------------------------------
 
-@PutMapping("/{email}/inlist")
-public User agregarSerie(@PathVariable String email, @RequestParam Long id){
-    Serie serie = serieService.getSerieById(id);
-    User existingUser = userService.getUserById(email);
-        if (existingUser != null) {
-            existingUser.addSerie(serie);
-            return userService.saveUser(existingUser);
-        } else {
-            return null;
+    @PutMapping("/{email}/inlist")
+    public User addSerie(@PathVariable String email, @RequestParam Long id){
+        Serie serie = serieService.getSerieById(id);
+        User existingUser = userService.getUserById(email);
+            if (existingUser != null) {
+                existingUser.addSerie(serie);
+                return userService.saveUser(existingUser);
+            } else {
+                return null;
+        }
     }
-}
 
+//----------------------------------------------VER CHAPTER-------------------------------------------------------
+
+    @PutMapping("/{email}/inlist/{id}/{season}")
+    public User seeChapterFromInlist(@PathVariable String email, @PathVariable Long id, @PathVariable int season, @RequestParam int chapter){
+        User existingUser = userService.getUserById(email);
+        if (existingUser != null) {
+            for (SerieUser su : existingUser.getInlist()) {
+                if(su.getId()==id){
+                    existingUser.selectChapter(su,season,chapter);
+                    return userService.saveUser(existingUser);
+                }
+            }
+            return userService.saveUser(existingUser);
+        } else return null;
+    }
+
+    @PutMapping("/{email}/started/{id}/{season}")
+    public User seeChapterFromStarted(@PathVariable String email, @PathVariable Long id, @PathVariable int season, @RequestParam int chapter){
+        User existingUser = userService.getUserById(email);
+        if (existingUser != null) {
+            for (SerieUser su : existingUser.getStarted()) {
+                if(su.getId()==id){
+                    existingUser.selectChapter(su,season,chapter);
+                    return userService.saveUser(existingUser);
+                }
+            }
+            return userService.saveUser(existingUser);
+        } else return null;
+    }
+
+    @PutMapping("/{email}/ended/{id}/{season}")
+    public User seeChapterFromEnded(@PathVariable String email, @PathVariable Long id, @PathVariable int season, @RequestParam int chapter){
+        User existingUser = userService.getUserById(email);
+        if (existingUser != null) {
+            for (SerieUser su : existingUser.getEnded()) {
+                if(su.getId()==id){
+                    existingUser.selectChapter(su,season,chapter);
+                    return userService.saveUser(existingUser);
+                }
+            }
+            return userService.saveUser(existingUser);
+        } else return null;
+    }
 }
 

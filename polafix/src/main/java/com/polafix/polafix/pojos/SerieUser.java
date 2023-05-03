@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -38,7 +37,7 @@ public class SerieUser {
             Season season = seasons.get(i);
             List<Chapter> chapters = season.getChapters();
             for(int j=0; j<chapters.size(); j++){
-                ChapterSeen c = new ChapterSeen(season.getNumber(), chapters.get(j).getNumber(), ChapterState.NOTSEEN);
+                ChapterSeen c = new ChapterSeen(season.getNumber(), chapters.get(j).getNumber(), chapters.get(j).getTitle(), chapters.get(j).getDescription(), ChapterState.NOTSEEN);
                 userChapters.add(c);
             }
         }
@@ -67,7 +66,7 @@ public class SerieUser {
             Season season = seasons.get(i);
             List<Chapter> chapters = season.getChapters();
             for(int j=0; j<chapters.size(); j++){
-                ChapterSeen c = new ChapterSeen(season.getNumber(), chapters.get(j).getNumber(), ChapterState.NOTSEEN);
+                ChapterSeen c = new ChapterSeen(season.getNumber(), chapters.get(j).getNumber(), chapters.get(j).getTitle(), chapters.get(j).getDescription(), ChapterState.NOTSEEN);
                 userChapters.add(c);
             }
         }

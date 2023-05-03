@@ -13,8 +13,10 @@ public class Serie {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     private Long id;
     private String name;
+    @JsonIgnore
     private Type type;
     private String shortDescription;
     @OneToMany(cascade = CascadeType.ALL)
